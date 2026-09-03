@@ -4,10 +4,11 @@
 
 **Making UDP reliable — one packet at a time.**
 
-A modular and reproducible reliable file-transfer system built on top of UDP, implementing **Stop-and-Wait, Go-Back-N, and Selective Repeat ARQ**, with adaptive RTO estimation and a deterministic network channel emulator.
+A modular and reproducible reliable file-transfer system built on raw UDP datagram sockets, implementing **Stop-and-Wait, Go-Back-N, and Selective Repeat ARQ**, with adaptive retransmission timeout estimation and a deterministic network channel emulator.
 
 <br>
 
+![Rust](https://img.shields.io/badge/Rust-1.XX%2B-orange?style=flat-square&logo=rust&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?style=flat-square&logo=python&logoColor=white)
 ![UDP](https://img.shields.io/badge/transport-UDP-111111?style=flat-square)
 ![ARQ](https://img.shields.io/badge/protocol-ARQ-6f42c1?style=flat-square)
@@ -22,107 +23,85 @@ A modular and reproducible reliable file-transfer system built on top of UDP, im
 
 ## What is Reliable Data Transfer over UDP?
 
-UDP is fast and lightweight, but it deliberately provides very few guarantees. Packets can be **lost, duplicated, reordered, corrupted, or delayed**, and UDP does not reconstruct the original byte stream for you.
+UDP provides a lightweight datagram transport, but it does not guarantee that packets will arrive, arrive only once, arrive in order, or remain unmodified.
 
-This project builds a reliable file-transfer layer **on top of UDP**.
+This project builds a **reliable file-transfer layer on top of raw UDP sockets**.
 
-Instead of implementing one reliability strategy, the project provides three interchangeable ARQ protocols:
+The system implements three interchangeable Automatic Repeat reQuest (ARQ) protocols:
 
-- **Stop-and-Wait** — one packet at a time
-- **Go-Back-N** — sliding window with cumulative acknowledgements
-- **Selective Repeat** — sliding window with selective acknowledgements and receiver buffering
+- **Stop-and-Wait** — one packet in flight at a time
+- **Go-Back-N** — fixed sender window with cumulative acknowledgements
+- **Selective Repeat** — sender and receiver buffering with individual acknowledgements
 
-The protocols operate over the same packet format, timing subsystem, UDP transport, deterministic channel emulator, metrics layer, and experiment framework.
+All three protocols operate over a shared packet format, retransmission-timing subsystem, deterministic channel emulator, and metrics/result interface.
 
-The goal is not simply to make UDP reliable.
+The reliable-transport path is implemented entirely in **Rust**.
 
-**The goal is to build a controlled environment for implementing, testing, measuring, and comparing different reliability strategies under reproducible network conditions.**
+**Python is used only for experiment orchestration, structured-result processing, statistical analysis, and visualization.**
+
+The project is designed not only to make UDP reliable, but to provide a **controlled and reproducible environment for implementing, testing, measuring, and comparing ARQ protocols under identical network conditions**.
 
 ---
 
 ## Why this project?
 
-A real network makes controlled protocol comparison difficult. If packet loss or reordering happens unpredictably, it becomes hard to determine whether a performance difference came from the protocol or from a different network event.
+Comparing reliability protocols on a real network makes controlled experimentation difficult. Packet loss, delay, reordering, and other network events are not guaranteed to be identical between runs.
 
-This project solves that problem with a **deterministic channel emulator**.
+This project addresses that problem with a **deterministic, seeded channel emulator**.
 
-The same experiment can be executed against all three ARQ protocols using:
+The same experiment can be executed against all three ARQ protocols using the same:
 
-- the same file
-- the same packet size
-- the same delay model
-- the same impairment probabilities
-- the same window configuration
-- the same random seed
+- source file
+- packet size
+- sender/receiver configuration
+- window size
+- delay model
+- impairment configuration
+- random seed
 
-This makes the resulting comparison much more meaningful and reproducible.
+This allows protocol behavior to be compared under **matched and reproducible conditions**.
+
+The project therefore combines:
+
+```text
+Reliable Transport
+        +
+Controlled Fault Injection
+        +
+Adaptive Retransmission Timing
+        +
+Integrity Verification
+        +
+Reproducible Experiments
+```
 
 ---
 
-## Features
+## Core Deliverables
 
-### Reliable File Transfer
+The final system provides:
 
-- UDP socket-based file transfer
-- File segmentation and reconstruction
+- Stop-and-Wait ARQ
+- Go-Back-N ARQ
+- Selective Repeat ARQ
+- Common packet framing
 - Sequence numbers
-- Packet checksums
-- Duplicate detection
-- Ordered delivery
-- SHA-256 end-to-end integrity verification
-- Transfer completion and failure handling
-
-### Three ARQ Protocols
-
-- **Stop-and-Wait ARQ**
-- **Go-Back-N ARQ**
-- **Selective Repeat ARQ**
-- Common protocol interface
-- Runtime protocol selection
-- Protocol-independent application layer
-
-### Adaptive Retransmission Timeout
-
-- RTT measurement
-- Jacobson/Karels RTT estimation
-- Smoothed RTT (`SRTT`)
-- RTT variation (`RTTVAR`)
-- Adaptive RTO
+- Checksums
+- Source-file chunking and reassembly
+- Duplicate packet and ACK handling
+- Guaranteed in-order application delivery
+- Adaptive Jacobson/Karels RTO estimation
+- SRTT and RTTVAR tracking
 - Karn's algorithm
-- RTO bounds
-- Timeout backoff
-- Timer generation IDs to prevent stale timer events
-
-### Deterministic Network Emulator
-
-Independently configurable network impairments:
-
-- Packet loss
-- Packet duplication
-- Packet corruption
-- Packet reordering
-- Base propagation delay
-- Random jitter
-- Direction-specific behavior
-- Seeded deterministic behavior
-
-### Reproducible Experiments
-
-Each run records enough information to understand and reproduce the result:
-
-- Protocol
-- Experiment ID
-- Configuration
-- Random seed
-- Software revision
-- Source-file hash
-- Transfer outcome
-- Completion time
-- Retransmission counts
-- Timeout counts
-- Channel impairment events
-- RTT/RTO statistics
-- SHA-256 integrity status
+- Exponential timeout backoff
+- Deterministic seeded channel emulation
+- Loss, duplication, corruption, reordering, delay, and jitter
+- SHA-256 end-to-end integrity verification
+- Rust-generated JSON/CSV raw results
+- Python experiment automation
+- Statistical analysis
+- Confidence intervals
+- Experimental plots
 
 ---
 
@@ -133,78 +112,108 @@ Each run records enough information to understand and reproduce the result:
                                   |
                                   v
                   +-------------------------------+
-                  |       Transfer Application    |
-                  |   File Source / File Sink     |
-                  |   CLI / Hash Verification     |
+                  |       Python Experiment       |
+                  |     Orchestration Layer       |
                   +---------------+---------------+
+                                  |
+                         JSON / CLI Interface
                                   |
                                   v
               +-------------------------------------------+
-              |                  ARQ Layer                 |
+              |             Rust Reliable Transport        |
               |                                           |
-              | Stop-and-Wait | Go-Back-N | Selective Rep |
+              |  UDP Sockets                              |
+              |  Packet Framing / Encoding                |
+              |  ARQ Protocols                            |
+              |  Retransmission Timers                    |
+              |  Adaptive RTO                             |
+              |  Channel Emulator                         |
               +----------------------+--------------------+
                                      |
-                       +-------------+-------------+
-                       |                           |
-                       v                           v
-                +-------------+             +-------------+
-                | Packet Codec|             | Timer / RTO |
-                | Validation  |             | Estimator   |
-                +------+------+             +------+------+
-                       |                           |
-                       +-------------+-------------+
+                                     v
+                          Deterministic Channel
+                                     |
+                 +-------------------+-------------------+
+                 |                   |                   |
+               Loss               Duplication         Corruption
+                 |                   |                   |
+                 +-------------------+-------------------+
+                                     |
+                              Delay / Jitter
+                                     |
+                               Reordering
                                      |
                                      v
-                     +-----------------------------+
-                     |   Deterministic Channel    |
-                     |                             |
-                     | Loss / Dup / Corruption    |
-                     | Reordering / Delay / Jitter|
-                     +-------------+---------------+
-                                   |
-                                   v
-                              UDP Receiver
-                                   |
-                                   v
-                         Packet Validation
-                                   |
-                                   v
-                              ARQ Receiver
-                                   |
-                                   v
-                         File Reconstruction
-                                   |
-                                   v
-                          SHA-256 Verification
-
-                 Runtime components
-                         |
-                         v
-                  +-------------+
-                  |   Metrics   |
-                  +------+------+ 
-                         |
-                         v
-                   JSON / CSV
-                         |
-                         v
-                Analysis & Plots
+                                UDP Receiver
+                                     |
+                                     v
+                            Packet Validation
+                                     |
+                                     v
+                               ARQ Receiver
+                                     |
+                                     v
+                           File Reconstruction
+                                     |
+                                     v
+                              SHA-256 Check
+                                     |
+                                     v
+                            JSON / CSV Result
+                                     |
+                                     v
+                         Python Analysis Pipeline
+                                     |
+                         +-----------+-----------+
+                         |                       |
+                         v                       v
+                      Tables                  Plots
 ```
 
-### Design rule
+### Implementation Boundary
 
-The ARQ protocols **do not know how the channel is configured**.
+The project deliberately separates **transport implementation** from **experimental analysis**.
 
-The channel receives serialized datagrams, applies its configured impairments, and forwards or drops them. This keeps protocol logic separate from network emulation.
+### Rust
+
+Rust implements the complete reliable-transport path:
+
+- UDP sockets
+- Packet framing
+- Byte-level encoding and decoding
+- Stop-and-Wait
+- Go-Back-N
+- Selective Repeat
+- Retransmission timers
+- RTT measurement
+- Jacobson/Karels RTO estimation
+- Deterministic channel emulator
+- File transfer
+- Integrity verification
+- Raw result generation
+
+### Python
+
+Python is used only for:
+
+- Experiment orchestration
+- Parameter sweeps
+- Running repeated trials
+- JSON/CSV processing
+- Statistical analysis
+- Confidence intervals
+- Aggregation
+- Visualization
+
+The Rust programs produce reproducible raw results that form the interface to the Python analysis pipeline.
 
 ---
 
-## ARQ Protocols
+# ARQ Protocols
 
-### Stop-and-Wait
+## Stop-and-Wait
 
-Stop-and-Wait permits a single outstanding data packet.
+Stop-and-Wait permits exactly one outstanding DATA packet.
 
 ```text
 Sender                         Receiver
@@ -218,61 +227,63 @@ Sender                         Receiver
   | <--------- ACK(2) ---------- |
 ```
 
-If an acknowledgement does not arrive before the RTO expires, the sender retransmits the packet.
+If an acknowledgement is not received before the retransmission timeout expires, the sender retransmits the outstanding packet.
 
-**Strengths**
+### Strengths
 
-- Very simple state machine
+- Simple protocol state
 - Minimal buffering
-- Easy to verify
+- Straightforward correctness reasoning
+- Useful baseline for comparison
 
-**Trade-off**
+### Trade-off
 
-- Throughput is heavily limited by RTT
-- Poor utilization on high-delay paths
+Throughput is strongly limited by the round-trip time because only one packet may be outstanding.
 
 ---
 
-### Go-Back-N
+## Go-Back-N
 
-Go-Back-N allows multiple packets to be outstanding.
+Go-Back-N uses a fixed sender window and cumulative acknowledgements.
 
-The receiver uses **cumulative acknowledgements** and normally accepts only the next packet in sequence.
+The receiver normally accepts only the next expected packet and discards out-of-order DATA packets.
 
 ```text
 Sender                         Receiver
 
-DATA 0 ---------------------->  deliver 0
-DATA 1 ---------------------->  deliver 1
+DATA 0 ----------------------> deliver 0
+DATA 1 ----------------------> deliver 1
 DATA 2 --------X
 
-DATA 3 ---------------------->  discard
-DATA 4 ---------------------->  discard
+DATA 3 ----------------------> discard
+DATA 4 ----------------------> discard
 
              <--------------- cumulative ACK
 
-DATA 2 ---------------------->  deliver 2
-DATA 3 ---------------------->  deliver 3
-DATA 4 ---------------------->  deliver 4
+DATA 2 ----------------------> deliver 2
+DATA 3 ----------------------> deliver 3
+DATA 4 ----------------------> deliver 4
 ```
 
-When recovery is required, several outstanding packets may need to be retransmitted.
+When a loss causes the sender to recover, multiple outstanding packets may be retransmitted.
 
-**Strengths**
+### Strengths
 
-- Better link utilization than Stop-and-Wait
-- Relatively simple sender/receiver logic
+- Better utilization than Stop-and-Wait
+- Fixed sender-window model
+- Simpler receiver buffering than Selective Repeat
 
-**Trade-off**
+### Trade-off
 
-- Reordering can cause unnecessary retransmissions
-- Loss recovery may retransmit packets that were already received
+Out-of-order packets are discarded, so reordering can cause unnecessary retransmissions of packets that have already reached the receiver.
 
 ---
 
-### Selective Repeat
+## Selective Repeat
 
-Selective Repeat allows the receiver to accept and buffer valid out-of-order packets.
+Selective Repeat allows the receiver to buffer valid out-of-order DATA packets.
+
+Each received packet can be acknowledged individually.
 
 ```text
 Sender                         Receiver
@@ -283,7 +294,7 @@ DATA 1 --------X
 DATA 2 ----------------------> buffer 2
 DATA 3 ----------------------> buffer 3
 
-             <--------------- selective ACK
+             <--------------- individual ACKs
 
 DATA 1 ----------------------> deliver 1
                               |
@@ -293,24 +304,58 @@ DATA 1 ----------------------> deliver 1
 
 Only missing packets need to be retransmitted.
 
-**Strengths**
+### Strengths
 
 - Efficient loss recovery
-- Handles reordering better
-- Avoids unnecessary retransmissions
+- Handles packet reordering better
+- Avoids unnecessary retransmission of already received packets
+- Receiver buffering preserves useful out-of-order packets
 
-**Trade-off**
+### Trade-off
 
-- More complex state management
-- Requires receiver buffering
+Selective Repeat requires more complex sender and receiver state management.
 
 ---
 
-## Adaptive RTO
+# Shared Packet Format
 
-Using a fixed retransmission timeout is unreliable across different network conditions.
+All ARQ protocols use a common packet representation above UDP.
 
-The timing subsystem estimates RTT and derives an adaptive RTO using the Jacobson/Karels approach.
+The packet framing contains fields for:
+
+```text
++----------------+----------------+
+| Sequence Number|     Length     |
++----------------+----------------+
+|      Flags / Type              |
++--------------------------------+
+|           Checksum             |
++--------------------------------+
+|          Payload              ...
++--------------------------------+
+```
+
+The exact encoding is implemented in Rust and is shared by all protocol implementations.
+
+The common framing provides:
+
+- Sequence identification
+- Packet type identification
+- Payload-length validation
+- Corruption detection
+- Consistent protocol boundaries
+
+The sender segments the source file into packet payloads.
+
+The receiver reconstructs the original byte stream and verifies its integrity using SHA-256.
+
+---
+
+# Adaptive Retransmission Timeout
+
+A fixed retransmission timeout does not perform consistently across different network conditions.
+
+The timing subsystem therefore estimates RTT dynamically using the **Jacobson/Karels algorithm**.
 
 Conceptually:
 
@@ -321,66 +366,93 @@ RTTVAR = RTT variation
 RTO = SRTT + max(G, 4 × RTTVAR)
 ```
 
-The implementation also applies:
+The implementation includes:
 
-- **Karn's algorithm** — retransmitted packets are not used as ordinary RTT samples
-- **RTO bounds** — prevents unreasonable timeout values
-- **Backoff** — repeated timeout events increase the effective timeout
-- **Timer generations** — prevents stale timer callbacks from affecting newer transmissions
+- RTT measurement
+- Smoothed RTT (`SRTT`)
+- RTT variation (`RTTVAR`)
+- Adaptive RTO calculation
+- Jacobson/Karels estimation
+- Karn's algorithm
+- Exponential timeout backoff
+- RTO bounds
+- Timer-generation handling
 
-The RTO system is therefore shared by the ARQ implementations rather than reimplemented independently for every protocol.
+### Karn's Algorithm
 
----
+RTT samples from retransmitted packets are treated as ambiguous and are not used as ordinary RTT samples.
 
-## Deterministic Channel Emulator
+### Timeout Backoff
 
-The network emulator sits between the sender and receiver.
+Repeated timeout events increase the effective retransmission timeout to avoid repeatedly retransmitting too aggressively when the network is experiencing delay or loss.
 
-```text
-UDP Sender
-    |
-    v
-+--------------------------------+
-|     Deterministic Channel      |
-|                                |
-|  Loss                          |
-|  Duplication                   |
-|  Corruption                    |
-|  Reordering                    |
-|  Delay                         |
-|  Jitter                        |
-+----------------+---------------+
-                 |
-                 v
-            UDP Receiver
-```
+### Timer Safety
 
-A scenario can define parameters such as:
-
-```text
-loss probability
-duplication probability
-reordering probability
-corruption probability
-base delay
-jitter
-seed
-```
-
-Because the channel is seeded, the logical impairment decisions can be reproduced across runs.
-
-The emulator is deliberately **protocol-independent**. It does not know whether a datagram contains DATA, ACK, sequence information, or ARQ state.
+Timer-generation identifiers prevent stale timer-expiry events from affecting newer transmissions.
 
 ---
 
-## Integrity Verification
+# Deterministic Channel Emulator
 
-A transfer is not considered successful merely because the protocol reaches its completion state.
-
-The receiver reconstructs the file and verifies it against the original using SHA-256.
+The channel emulator sits between the UDP sender and receiver.
 
 ```text
-Original file
+                    UDP Sender
+                        |
+                        v
+             +-----------------------+
+             | Deterministic Channel |
+             +-----------------------+
+                |    |    |    |    |
+                v    v    v    v    v
+               Loss Dup  Corr Reorder Delay/Jitter
+                \    |    |    |    /
+                 \   |    |    |   /
+                  +--+----+----+--+
+                           |
+                           v
+                      UDP Receiver
+```
+
+The emulator operates on serialized datagrams and is deliberately **protocol-independent**.
+
+It does not inspect whether a datagram contains:
+
+- DATA
+- ACK
+- Sequence information
+- ARQ state
+
+Instead, it applies configured network impairments to datagrams.
+
+### Supported Impairments
+
+- Packet loss
+- Packet duplication
+- Packet corruption
+- Packet reordering
+- Base delay
+- Random jitter
+- Direction-specific behavior
+
+### Deterministic Seeds
+
+Each experiment supplies a seed to the emulator.
+
+This makes the logical impairment decisions reproducible and allows matched protocol comparisons under controlled conditions.
+
+Wall-clock completion time can still vary because of operating-system scheduling and machine load.
+
+---
+
+# Integrity Verification
+
+Protocol completion alone does not determine whether a transfer was successful.
+
+The receiver reconstructs the transferred file and compares its SHA-256 digest with the source file.
+
+```text
+Original File
       |
       v
    SHA-256
@@ -389,95 +461,154 @@ Original file
       +----------+----------+
                  |
                  v
-          Integrity result
+          Integrity Result
                  ^
                  |
       +----------+----------+
       |
    SHA-256
       |
-Received file
+Received File
 ```
 
-A successful run must satisfy:
+A successful transfer must satisfy:
 
 ```text
 source_sha256 == received_sha256
 ```
 
-The system also tracks **unique application bytes** so duplicate packets cannot inflate the reported delivered-byte count.
+The system also tracks **unique application bytes** so retransmitted or duplicated packets cannot artificially increase delivered-byte measurements.
 
 ---
 
-## Experiments
+# The Experimental Claim
 
-The project is designed around controlled experiments comparing the three ARQ protocols.
+The primary claim tested by this project is:
 
-### E1 — Goodput vs Packet Loss
+> **Under identical controlled conditions, Selective Repeat will require fewer data retransmissions than Go-Back-N as packet reordering increases.**
 
-**Independent variable**
+The reasoning is based on the fundamental difference between the two protocols:
 
-Packet loss probability.
+- Go-Back-N discards out-of-order packets.
+- Selective Repeat buffers valid out-of-order packets.
+- Go-Back-N can therefore retransmit packets that have already been successfully received.
+- Selective Repeat can selectively retransmit only missing packets.
 
-**Measured**
-
-- Goodput
-- Completion time
-- Retransmissions
-- Failure rate
-
-The protocol runs use the same file, configuration, and seed set.
+The experiment is designed to measure whether this difference becomes increasingly visible as packet reordering increases.
 
 ---
 
-### E2 — Goodput vs Window Size
+# Experiments
 
-**Independent variable**
+## E1 — Retransmissions vs Packet Reordering
 
-ARQ window size.
+This is the **primary experiment** of the project.
 
-Example values:
-
-```text
-1, 2, 4, 8, 16, 32
-```
-
-**Measured**
-
-- Goodput
-- Completion time
-- Retransmissions
-
-This evaluates how increasing the number of outstanding packets affects utilization and transfer performance.
-
----
-
-### E3 — Retransmissions vs Reordering
-
-**Independent variable**
+### Independent Variable
 
 Packet reordering probability.
 
-Example values:
+The probability is swept from approximately:
 
 ```text
-0%, 5%, 10%, 20%, 30%, 40%
+0% → 25%
 ```
 
-**Measured**
+### Controlled Variables
 
-- Retransmission count
-- Retransmission rate
+The following remain fixed:
+
+- Packet loss
+- File size
+- Packet size
+- Window size
+- Base RTT
+- Timeout controls
+- Other channel parameters
+
+Packet loss is held at **0%** to isolate the effect of reordering.
+
+### Method
+
+Each experimental condition is executed multiple times using matched seeds.
+
+The experiment records:
+
+- Data retransmissions
+- Timeout counts
+- Failure counts
+- Completion time
 - Goodput
-- Duplicate ACKs
+- Raw per-run results
 
-The main hypothesis is that Go-Back-N becomes increasingly inefficient under reordering because cumulative ACK gaps can trigger unnecessary retransmissions, while Selective Repeat can buffer valid out-of-order packets.
+The primary reported metric is:
+
+```text
+Mean data retransmissions
+```
+
+with:
+
+```text
+95% confidence intervals
+```
 
 ---
 
-### E4 — RTO Sensitivity
+## E2 — Goodput vs Window Size
 
-The computed adaptive RTO is scaled using controlled multipliers:
+This experiment studies how sender window size affects transfer performance.
+
+Example window sizes:
+
+```text
+1
+2
+4
+8
+16
+32
+```
+
+The exact matrix is defined by the experiment configuration.
+
+### Measured
+
+- Goodput
+- Completion time
+- Data retransmissions
+- Timeout count
+- Transfer outcome
+
+The experiment allows the behavior of the three ARQ protocols to be compared as the number of outstanding packets changes.
+
+---
+
+## E3 — Goodput vs Packet Loss
+
+This experiment studies protocol behavior as the underlying network becomes increasingly lossy.
+
+### Independent Variable
+
+Packet loss probability.
+
+### Measured
+
+- Goodput
+- Completion time
+- Data retransmissions
+- Timeout count
+- Failure rate
+
+All protocols are evaluated under matched experimental conditions.
+
+---
+
+## E4 — RTO Sensitivity
+
+The adaptive RTO produced by the Jacobson/Karels estimator is scaled using a controlled multiplier.
+
+Example multipliers include:
 
 ```text
 0.5×
@@ -485,70 +616,94 @@ The computed adaptive RTO is scaled using controlled multipliers:
 1.0×
 1.5×
 2.0×
+3.0×
 ```
 
-**Measured**
+The exact values are experiment-configurable.
+
+The Jacobson/Karels estimator parameters, including alpha and beta, remain fixed.
+
+### Measured
 
 - Goodput
 - Timeout count
-- Retransmissions
+- Data retransmissions
 - Completion time
 - Final SRTT
 - Final RTO
 
-This demonstrates the trade-off:
+The experiment investigates the trade-off between:
 
 ```text
 RTO too small
       |
       v
 Premature / spurious retransmissions
+```
 
+and:
 
+```text
 RTO too large
       |
       v
-Slow recovery from real packet loss
+Slow recovery from genuine packet loss
 ```
-
-The estimator parameters remain fixed while the effective RTO scale is varied.
 
 ---
 
-## Metrics
+# Statistical Methodology
 
-The metrics system separates **application behavior**, **protocol behavior**, **timing**, and **channel behavior**.
+The experiment pipeline preserves individual raw runs rather than storing only aggregated results.
 
-### Application Metrics
+For repeated experimental conditions, the analysis reports:
 
-- Source bytes
-- Delivered unique bytes
+- Mean values
+- Confidence intervals
+- Failure counts
+- Timeout counts
+- Per-run measurements
+
+For the primary reordering experiment, the main reported result is the **mean data retransmission count with a 95% confidence interval**.
+
+The raw results remain available so that every aggregate and visualization can be traced back to individual runs.
+
+---
+
+# Metrics
+
+The metrics system separates application, timing, protocol, channel, and experiment-level measurements.
+
+## Application Metrics
+
+- Source file size
+- Delivered unique application bytes
 - Transfer status
-- SHA-256 result
+- SHA-256 integrity result
 
-### Timing Metrics
+## Timing Metrics
 
 - Data-transfer completion time
-- Sender completion time
-- Receiver completion time
-- Integrity-verification time
 - RTT samples
 - SRTT
 - RTTVAR
 - RTO values
+- Timeout count
+- Timeout backoff events
 
-### Protocol Metrics
+## Protocol Metrics
 
 - DATA sends
 - ACK sends
 - DATA receives
 - ACK receives
-- Retransmissions
+- Data retransmissions
 - Timeout retransmissions
-- Duplicate packets
+- Duplicate DATA packets
 - Duplicate ACKs
+- Buffered packets where applicable
 
-### Channel Metrics
+## Channel Metrics
 
 - Offered datagrams
 - Dropped datagrams
@@ -557,94 +712,138 @@ The metrics system separates **application behavior**, **protocol behavior**, **
 - Reordered datagrams
 - Scheduled deliveries
 
-### Goodput
+## Experiment Metrics
 
-Goodput is based on successfully delivered unique application bytes:
-
-```text
-goodput = unique application bytes delivered
-          --------------------------------
-          data-transfer completion time
-```
-
-Retransmitted and duplicate bytes are not included in the numerator.
-
-Failed or integrity-failed runs are reported separately rather than silently treating them as zero-goodput runs.
+- Experiment ID
+- Protocol
+- Configuration
+- Seed
+- Trial/run ID
+- Completion status
+- Failure status
+- Software revision
 
 ---
 
-## Reproducibility
+# Goodput
 
-Every experiment run records a reproducibility bundle containing information such as:
+Goodput measures successfully delivered **unique application bytes** relative to data-transfer completion time.
+
+```text
+                         unique application bytes delivered
+goodput = ----------------------------------------------------------
+                    data-transfer completion time
+```
+
+Retransmitted and duplicated packets are not counted again in the numerator.
+
+Failed or integrity-failed transfers are reported separately rather than silently converting them into zero-goodput measurements.
+
+---
+
+# Reproducibility
+
+Every experiment produces a raw result containing enough information to reproduce and interpret the run.
+
+A result includes information such as:
 
 ```text
 run_id
 experiment_id
 protocol
 configuration
-seed
-software revision
-source-file hash
-file size
-terminal status
-timing information
-protocol counters
-channel counters
-integrity result
+random_seed
+software_revision
+source_file_hash
+file_size
+terminal_status
+completion_time
+protocol_counters
+channel_counters
+timing_statistics
+integrity_result
 ```
 
 The experiment flow is:
 
 ```text
-Experiment
-    |
-    +-- Protocol
-    +-- Configuration
-    +-- Seed
-    +-- Source file
-    +-- Software revision
-              |
-              v
-        Deterministic run
-              |
-              v
-          Raw result
-              |
-       +------+------+
-       |             |
-       v             v
-     Tables        Plots
+Experiment Configuration
+          |
+          v
+     Protocol
+          |
+          v
+      Seed + Configuration
+          |
+          v
+     Rust Transport
+          |
+          v
+ Deterministic Channel
+          |
+          v
+       Raw Result
+          |
+     +----+----+
+     |         |
+     v         v
+   JSON      CSV
+     |         |
+     +----+----+
+          |
+          v
+ Python Analysis
+          |
+     +----+----+
+     |         |
+     v         v
+  Tables     Plots
 ```
 
-Logical channel impairment decisions are reproducible. Wall-clock completion time can still vary because of operating-system scheduling and machine load.
+### Reproducibility Boundary
+
+The seeded channel emulator makes logical impairment decisions reproducible.
+
+However, wall-clock completion time may vary due to:
+
+- Operating-system scheduling
+- Machine load
+- Timer granularity
+- Runtime scheduling
+
+Therefore, deterministic seeds provide **reproducible experimental conditions**, not necessarily bit-identical wall-clock timing.
 
 ---
 
-## Testing
+# Testing
 
-Testing focuses on **protocol correctness**, not only successful transfers.
+Testing focuses on protocol correctness as well as end-to-end reliability.
 
-### Packet Tests
+## Packet Tests
 
 - Encode/decode round trips
 - Boundary payload sizes
 - Malformed packets
 - Invalid lengths
-- Invalid flags
+- Invalid flags/types
 - Checksum corruption
 - Truncated datagrams
+- Invalid sequence information
 
-### Timer / RTO Tests
+## Timer / RTO Tests
 
 - RTT estimation
+- SRTT calculation
+- RTTVAR calculation
 - RTO calculation
 - RTO bounds
 - Karn's algorithm
 - Timeout backoff
 - Timer cancellation
-- Stale timer generation handling
+- Timer-generation handling
+- Stale timer expiry
 
-### Channel Tests
+## Channel Tests
 
 - Loss
 - Duplication
@@ -654,11 +853,9 @@ Testing focuses on **protocol correctness**, not only successful transfers.
 - Reordering
 - Combined impairments
 - Seed reproducibility
-- Direction-specific configuration
+- Direction-specific behavior
 
-### ARQ Tests
-
-Each protocol is tested against conditions including:
+## Stop-and-Wait Tests
 
 - Clean transfer
 - Lost DATA
@@ -666,14 +863,44 @@ Each protocol is tested against conditions including:
 - Duplicate DATA
 - Duplicate ACK
 - Corrupted DATA
-- Reordered DATA
 - Delayed ACK
-- Timeout
-- Retry limit
+- Timeout recovery
+- Retry limits
 - Final DATA loss
 - Final ACK loss
 
-### End-to-End Tests
+## Go-Back-N Tests
+
+- Clean transfer
+- Window advancement
+- Cumulative ACK handling
+- Lost DATA
+- Lost ACK
+- Duplicate DATA
+- Duplicate ACK
+- Out-of-order DATA
+- Timeout recovery
+- Outstanding-window retransmission
+- Final DATA loss
+- Final ACK loss
+
+## Selective Repeat Tests
+
+- Clean transfer
+- Sender window handling
+- Receiver window handling
+- Individual ACKs
+- Out-of-order buffering
+- Lost DATA
+- Lost ACK
+- Duplicate DATA
+- Duplicate ACK
+- Selective retransmission
+- Timeout recovery
+- Final DATA loss
+- Final ACK loss
+
+## End-to-End Tests
 
 The end-to-end suite includes:
 
@@ -684,25 +911,36 @@ The end-to-end suite includes:
 - Binary files
 - Larger transfer fixtures
 - Clean transfers
-- Impaired transfers
+- Lossy transfers
+- Reordered transfers
+- Corrupted transfers
+- Combined impairment scenarios
 - SHA-256 verification
 
-A successful transfer must demonstrate both **protocol completion** and **file integrity**.
+A successful transfer must demonstrate both:
+
+```text
+Protocol completion
+        AND
+SHA-256 integrity
+```
 
 ---
 
-## Repository Structure
+# Repository Structure
 
 ```text
 .
 ├── README.md
 ├── AI-USE.md
-├── docs/
+├── Cargo.toml
 │
 ├── src/
+│   ├── main.rs
 │   ├── app/
 │   ├── packet/
 │   ├── arq/
+│   │   ├── mod.rs
 │   │   ├── sw/
 │   │   ├── gbn/
 │   │   └── sr/
@@ -711,85 +949,141 @@ A successful transfer must demonstrate both **protocol completion** and **file i
 │   └── metrics/
 │
 ├── tests/
-│   ├── unit/
-│   │   ├── packet/
-│   │   ├── timing/
-│   │   ├── channel/
-│   │   └── metrics/
-│   ├── protocol/
+│   ├── packet/
+│   ├── timing/
+│   ├── channel/
+│   ├── arq/
 │   │   ├── sw/
 │   │   ├── gbn/
 │   │   └── sr/
-│   ├── integration/
-│   └── fixtures/
+│   └── integration/
+│
+├── fixtures/
 │
 ├── configs/
 │   ├── base/
 │   └── experiments/
 │
 ├── experiments/
+│   └── python/
+│
 ├── scripts/
+│
 ├── results/
+│   ├── raw/
+│   └── processed/
+│
 ├── plots/
+│
 └── reports/
 ```
 
-The repository keeps protocol implementations, timing, channel emulation, metrics, experiments, and analysis separated so experimental logic does not leak into the transport implementation.
+The repository separates:
+
+```text
+Rust Transport
+      |
+      +-- Packet
+      +-- ARQ
+      +-- Timing
+      +-- Channel
+      +-- Metrics
+      |
+      v
+Raw JSON / CSV
+      |
+      v
+Python Experiments
+      |
+      +-- Automation
+      +-- Statistics
+      +-- Aggregation
+      +-- Visualization
+```
+
+This prevents experimental analysis logic from leaking into the reliable-transport implementation.
 
 ---
 
-## Design Principles
+# Design Principles
 
-### 1. Protocols share contracts
+### 1. Shared Protocol Contracts
 
-Switching from Stop-and-Wait to Go-Back-N or Selective Repeat should not require changing the application or experiment runner.
+The application and experiment runner should not need to change when switching between:
 
-### 2. The emulator is protocol-independent
+```text
+Stop-and-Wait
+Go-Back-N
+Selective Repeat
+```
 
-The ARQ layer never needs to know whether a packet was intentionally lost, reordered, duplicated, delayed, or corrupted.
+### 2. Protocol-Independent Channel
 
-### 3. Correctness comes before performance
+The channel emulator operates on datagrams rather than understanding ARQ semantics.
 
-A fast transfer that occasionally produces corrupted output is still a failed implementation.
+### 3. Correctness Before Performance
 
-### 4. Experiments must be reproducible
+A transfer that completes quickly but produces corrupted output is a failed transfer.
 
-Configurations, seeds, software revisions, and raw results are preserved.
+### 4. Reproducibility by Design
 
-### 5. Raw data is never replaced by aggregates
+Configurations, seeds, software revisions, and raw per-run results are preserved.
 
-Every graph and table should be traceable to individual experiment runs.
+### 5. Raw Data First
 
-### 6. Core before stretch
+Aggregated tables and plots must always be traceable to individual experimental runs.
 
-Required reliability mechanisms and experiments are prioritized before optional extensions.
+### 6. Controlled Experiments
+
+The primary protocol comparison changes one experimental factor at a time while keeping the remaining relevant parameters fixed.
+
+### 7. Core Before Stretch
+
+Required reliability mechanisms, correctness tests, and mandatory experiments take priority over optional extensions.
 
 ---
 
-## Scope
+# Scope
 
-### Core
+## Core
 
 - [ ] Stop-and-Wait ARQ
 - [ ] Go-Back-N ARQ
 - [ ] Selective Repeat ARQ
+- [ ] Common packet framing
 - [ ] Sequence numbers
 - [ ] Checksums
+- [ ] Length and packet-type fields
 - [ ] Cumulative acknowledgements
-- [ ] Selective acknowledgements
+- [ ] Individual acknowledgements
+- [ ] Duplicate packet handling
+- [ ] Duplicate ACK handling
+- [ ] In-order application delivery
 - [ ] Adaptive RTO
 - [ ] Jacobson/Karels RTT estimation
+- [ ] SRTT
+- [ ] RTTVAR
 - [ ] Karn's algorithm
-- [ ] Deterministic channel emulator
+- [ ] Exponential timeout backoff
+- [ ] Deterministic seeded channel emulator
+- [ ] Loss
+- [ ] Duplication
+- [ ] Corruption
+- [ ] Reordering
+- [ ] Delay and jitter
 - [ ] SHA-256 integrity verification
-- [ ] Automated correctness tests
-- [ ] Reproducible experiment runner
+- [ ] Rust raw-result generation
+- [ ] JSON/CSV result interface
+- [ ] Python experiment automation
+- [ ] Statistical analysis
+- [ ] 95% confidence intervals
 - [ ] Required performance experiments
-- [ ] Result aggregation and visualization
+- [ ] Result visualization
+- [ ] End-to-end validation
 
-### Stretch
+## Stretch
 
-Stretch features are considered only after the core implementation and mandatory experiments are stable.
+Stretch features are considered only after the core system, correctness tests, and required experiments are stable.
 
 Possible extensions include:
 
@@ -801,7 +1095,7 @@ Possible extensions include:
 
 ---
 
-## What This Project Is Not
+# What This Project Is Not
 
 This project is intentionally **not**:
 
@@ -812,31 +1106,31 @@ This project is intentionally **not**:
 - A GUI networking application
 - An Internet-scale benchmark
 
-The purpose is to study reliability mechanisms under a controlled and reproducible network model.
+The purpose is to study **transport-layer reliability and ARQ behavior under controlled and reproducible network conditions**.
 
 ---
 
-## Technology Stack
+# Technology Stack
 
 | Technology | Purpose |
 |---|---|
-| **Python** | Primary implementation language |
-| **UDP sockets** | Transport |
-| **threading / asyncio** | Concurrency and timers |
-| **hashlib / SHA-256** | File integrity |
-| **pytest** | Automated testing |
+| **Rust** | Complete reliable-transport implementation |
+| **UDP sockets** | Underlying datagram transport |
+| **Rust standard library / runtime facilities** | Networking, concurrency, timers, file I/O |
+| **SHA-256** | End-to-end file integrity |
 | **JSON** | Configuration and structured results |
-| **CSV** | Experiment exports |
-| **pandas** | Result analysis |
+| **CSV** | Experiment result exchange |
+| **Python 3.11+** | Experiment orchestration and analysis |
+| **pandas** | Result processing and statistical analysis |
 | **matplotlib** | Visualization |
 
-No existing reliable-transport library is used to implement the ARQ protocols.
+No existing reliable-transport or ARQ library is used to implement the protocols.
 
 ---
 
-## Getting Started
+# Getting Started
 
-> Installation and execution commands will be added here as the implementation stabilizes.
+> Installation and execution commands will be added as the implementation stabilizes.
 
 The intended workflow is:
 
@@ -845,69 +1139,145 @@ The intended workflow is:
         ↓
 2. Select ARQ protocol
         ↓
-3. Configure deterministic channel
+3. Configure channel conditions
         ↓
-4. Run sender and receiver
+4. Run the Rust transport
         ↓
-5. Transfer file
+5. Transfer file over UDP
         ↓
 6. Verify SHA-256 integrity
         ↓
-7. Record metrics
+7. Emit JSON/CSV raw result
         ↓
-8. Store raw result
+8. Repeat experimental condition
         ↓
-9. Aggregate and visualize
+9. Run Python analysis
+        ↓
+10. Generate tables and plots
 ```
 
 ---
 
-## Academic Project
+# Project Workflow
 
-This project is developed as **P3 — Reliable Data Transfer over UDP** for a Computer Networks coding assignment.
+The development plan follows the final project proposal:
 
-It focuses on demonstrating:
+```text
+Week 1
+Interfaces, packet header design, proposal, repository setup
+        ↓
+Week 2
+Packet codec, channel, timer, metrics foundations
+        ↓
+Week 3
+Stop-and-Wait + first fault-injection results
+        ↓
+Week 4
+Go-Back-N integration and fault testing
+        ↓
+Week 5
+Selective Repeat + combined-fault testing
+        ↓
+Week 6
+Experiment runner + pilot studies + first plots
+        ↓
+Week 7
+Final experiment matrix + statistics + regression fixes
+        ↓
+Week 8
+Final validation + documentation + demo + viva preparation
+```
+
+The project prioritizes a working vertical slice early so that integration problems are discovered before the full experimental phase.
+
+---
+
+# Academic Project
+
+This project is developed as:
+
+**P3 — Reliable Data Transfer over UDP**
+
+for:
+
+**CS-30003 • Coding Assignment 1**
+
+The project focuses on demonstrating:
 
 - UDP socket programming
 - Transport-layer reliability
 - ARQ protocols
 - Sliding-window protocols
 - Sequence numbers and acknowledgements
-- RTT and retransmission timeout estimation
+- RTT estimation
+- Retransmission timeout estimation
 - Packet-level fault handling
 - Deterministic network emulation
+- File integrity verification
 - Experimental methodology
+- Statistical analysis
 - Reproducible networking experiments
 
 ---
 
-## Project Goal
+# Team
 
-The central question behind the project is:
+| Member | Responsibility |
+|---|---|
+| **Soumyadeb Mukherjee** | Protocol & ARQ — packet format and semantics, Stop-and-Wait, Go-Back-N, Selective Repeat, protocol-state and conformance testing |
+| **Kashish Gupta** | Timing & RTO — retransmission timers, Jacobson/Karels RTO, SRTT, RTTVAR, Karn's algorithm, timing and timeout tests |
+| **Ashwika Burman** | Channel Emulator — deterministic loss, duplication, reordering, corruption, delay/jitter, seed replay, emulator testing |
+| **Sahan Maiti** | Evaluation & Integration — Rust/Python experiment interface, experiment automation, metrics, raw-result logging, statistical analysis, plots, integrity checks, end-to-end validation |
 
-> **How do Stop-and-Wait, Go-Back-N, and Selective Repeat behave as the underlying network becomes unreliable, and how does adaptive timeout estimation affect their ability to recover efficiently?**
+All members contribute to:
 
-The project combines:
-
-```text
-UDP
- +
-ARQ
- +
-Adaptive RTO
- +
-Deterministic Fault Injection
- +
-Integrity Verification
- +
-Reproducible Experiments
-```
-
-into one modular networking system.
+- Integration
+- Code review
+- Debugging
+- Documentation
+- Final validation
+- Demo preparation
+- Viva preparation
 
 ---
 
-## License
+# Project Goal
+
+The central question behind the project is:
+
+> **How do Stop-and-Wait, Go-Back-N, and Selective Repeat behave as packet reordering increases under identical controlled network conditions, and how does adaptive timeout estimation affect their recovery efficiency?**
+
+The primary claim is:
+
+> **Selective Repeat will require fewer data retransmissions than Go-Back-N as packet reordering increases.**
+
+The project tests this claim through controlled experiments rather than relying only on theoretical expectations.
+
+The complete system combines:
+
+```text
+Raw UDP
+   +
+Packet Framing
+   +
+ARQ Reliability
+   +
+Adaptive RTO
+   +
+Deterministic Fault Injection
+   +
+SHA-256 Integrity
+   +
+Reproducible Raw Results
+   +
+Statistical Analysis
+```
+
+into one modular reliable data-transfer system.
+
+---
+
+# License
 
 This project is released under the **MIT License**.
 
