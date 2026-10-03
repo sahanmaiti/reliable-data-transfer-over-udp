@@ -99,7 +99,7 @@ Day 14     : Code freeze, viva defense mock, documentation finalization, demo pr
 - [ ] Create pre-configured experiment profiles in `configs/experiments/`.
 - [ ] Verify zero memory leaks or unbounded buffer growth in reordering queues.
 
-### Sahan Maiti (Lead)
+### Sahan Maiti
 - [ ] Wire CLI commands in `src/main.rs` (`reliable_udp send/recv/experiment`).
 - [ ] Write Python automation script `experiments/python/run_experiments.py`.
 - [ ] Run parameter sweep: Reordering Rate (0% to 25%) across Stop-and-Wait, GBN, and SR.
