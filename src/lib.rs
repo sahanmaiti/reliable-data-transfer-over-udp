@@ -4,3 +4,4 @@
 pub mod packet;
 pub mod app;
 pub mod metrics;
+pub mod channel;
