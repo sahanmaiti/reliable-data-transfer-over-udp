@@ -4,12 +4,19 @@
 
 use clap::{Parser, Subcommand};
 use reliable_udp::app::{compute_file_sha256, verify_file_integrity, Chunker, Reassembler};
+use reliable_udp::arq::{
+    GoBackNReceiver, GoBackNSender, ProtocolType, SelectiveRepeatReceiver, SelectiveRepeatSender,
+    StopAndWaitReceiver, StopAndWaitSender,
+};
+use reliable_udp::channel::{Channel, ChannelConfig};
 use reliable_udp::metrics::{
     ApplicationMetrics, ChannelMetrics, ExperimentMeta, ExperimentRecord, ProtocolMetrics,
     TimingMetrics,
 };
-use reliable_udp::packet::MAX_PAYLOAD_SIZE;
+use reliable_udp::packet::{Packet, MAX_PAYLOAD_SIZE};
+use reliable_udp::timing::RtoEstimator;
 use std::path::PathBuf;
+use std::str::FromStr;
 use std::time::Instant;
 
 #[derive(Parser, Debug)]
@@ -61,6 +68,28 @@ enum Commands {
         /// Path to save JSON experiment output to
         #[arg(long)]
         json_out: Option<PathBuf>,
+    },
+
+    /// Simulates a reliable transfer through the deterministic channel emulator & ARQ protocol
+    Simulate {
+        /// File to transfer
+        #[arg(short, long)]
+        file: PathBuf,
+        /// Protocol: StopAndWait, GoBackN, SelectiveRepeat
+        #[arg(short, long, default_value = "StopAndWait")]
+        protocol: String,
+        /// Window size (1 for SW, >= 1 for GBN/SR)
+        #[arg(short, long, default_value_t = 4)]
+        window: usize,
+        /// Packet loss probability [0.0 - 1.0]
+        #[arg(long, default_value_t = 0.0)]
+        loss: f64,
+        /// Packet reordering probability [0.0 - 1.0]
+        #[arg(long, default_value_t = 0.0)]
+        reorder: f64,
+        /// Random seed for deterministic reproducibility
+        #[arg(long, default_value_t = 42)]
+        seed: u64,
     },
 }
 
@@ -182,6 +211,188 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 record.save_json(&json_path)?;
                 println!("Saved experiment record to JSON: {:?}", json_path);
             }
+        }
+
+        Commands::Simulate {
+            file,
+            protocol,
+            window,
+            loss,
+            reorder,
+            seed,
+        } => {
+            println!("== Running Simulated ARQ Transfer over Deterministic Channel ==");
+            let proto = ProtocolType::from_str(&protocol).map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidInput, e))?;
+            let source_sha = compute_file_sha256(&file)?;
+            let file_bytes = std::fs::metadata(&file)?.len();
+
+            let chunker = Chunker::default();
+            let packets = chunker.chunk_file(&file)?;
+            let total_chunks = packets.len();
+
+            let channel_config = ChannelConfig {
+                seed,
+                loss,
+                duplicate: 0.0,
+                reorder,
+                reorder_extra_ms: 20,
+                corrupt: 0.0,
+                base_delay_ms: 10,
+                jitter_ms: 0,
+            };
+            let mut channel = Channel::new(channel_config);
+            let mut rto_estimator = RtoEstimator::new();
+            let mut reassembler = Reassembler::new();
+
+            let start = Instant::now();
+            let mut retransmissions: u64 = 0;
+
+            match proto {
+                ProtocolType::StopAndWait => {
+                    let mut sender = StopAndWaitSender::new(10);
+                    let mut receiver = StopAndWaitReceiver::new();
+
+                    for pkt in packets {
+                        let mut current_pkt = sender.send_chunk(pkt.payload).unwrap();
+                        loop {
+                            let wire = current_pkt.serialize();
+                            let deliveries = channel.process(&wire);
+
+                            if deliveries.is_empty() {
+                                // Packet was lost! Timeout and retransmit.
+                                rto_estimator.on_timeout();
+                                if let Some(retry) = sender.handle_timeout() {
+                                    current_pkt = retry;
+                                    continue;
+                                } else {
+                                    eprintln!("Transfer failed: max retries exceeded");
+                                    std::process::exit(1);
+                                }
+                            }
+
+                            // Receiver gets delivery
+                            let mut acked = false;
+                            for d in deliveries {
+                                if let Ok(recv_pkt) = Packet::deserialize(&d.data) {
+                                    if let Some(ack) = receiver.handle_packet(&recv_pkt) {
+                                        // Forward ACK through channel back to sender
+                                        let ack_wire = ack.serialize();
+                                        let ack_deliveries = channel.process(&ack_wire);
+                                        for ad in ack_deliveries {
+                                            if let Ok(ack_p) = Packet::deserialize(&ad.data) {
+                                                if sender.handle_ack(&ack_p) {
+                                                    acked = true;
+                                                    rto_estimator.update_rtt(std::time::Duration::from_millis(20), false);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if acked {
+                                break;
+                            } else {
+                                // ACK lost or delayed
+                                rto_estimator.on_timeout();
+                                if let Some(retry) = sender.handle_timeout() {
+                                    current_pkt = retry;
+                                }
+                            }
+                        }
+                    }
+
+                    for chunk in receiver.drain_delivered() {
+                        reassembler.push_chunk(reassembler.next_expected_seq, &chunk);
+                    }
+                    retransmissions = sender.retransmissions;
+                }
+
+                ProtocolType::GoBackN => {
+                    let mut sender = GoBackNSender::new(window);
+                    let mut receiver = GoBackNReceiver::new();
+
+                    for pkt in packets {
+                        if let Some(data_pkt) = sender.send_chunk(pkt.payload) {
+                            let wire = data_pkt.serialize();
+                            let deliveries = channel.process(&wire);
+                            for d in deliveries {
+                                if let Ok(recv_pkt) = Packet::deserialize(&d.data) {
+                                    if let Some(ack) = receiver.handle_packet(&recv_pkt) {
+                                        let ack_wire = ack.serialize();
+                                        let ack_deliveries = channel.process(&ack_wire);
+                                        for ad in ack_deliveries {
+                                            if let Ok(ack_p) = Packet::deserialize(&ad.data) {
+                                                sender.handle_ack(&ack_p);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Flush any remaining unacked packets
+                    let retries = sender.handle_timeout();
+                    for r in retries {
+                        let wire = r.serialize();
+                        for d in channel.process(&wire) {
+                            if let Ok(recv_pkt) = Packet::deserialize(&d.data) {
+                                if let Some(ack) = receiver.handle_packet(&recv_pkt) {
+                                    sender.handle_ack(&ack);
+                                }
+                            }
+                        }
+                    }
+
+                    for chunk in receiver.drain_delivered() {
+                        reassembler.push_chunk(reassembler.next_expected_seq, &chunk);
+                    }
+                    retransmissions = sender.retransmissions;
+                }
+
+                ProtocolType::SelectiveRepeat => {
+                    let mut sender = SelectiveRepeatSender::new(window);
+                    let mut receiver = SelectiveRepeatReceiver::new(window);
+
+                    for pkt in packets {
+                        if let Some(data_pkt) = sender.send_chunk(pkt.payload) {
+                            let wire = data_pkt.serialize();
+                            let deliveries = channel.process(&wire);
+                            for d in deliveries {
+                                if let Ok(recv_pkt) = Packet::deserialize(&d.data) {
+                                    if let Some(ack) = receiver.handle_packet(&recv_pkt) {
+                                        let ack_wire = ack.serialize();
+                                        let ack_deliveries = channel.process(&ack_wire);
+                                        for ad in ack_deliveries {
+                                            if let Ok(ack_p) = Packet::deserialize(&ad.data) {
+                                                sender.handle_ack(&ack_p);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    for chunk in receiver.drain_delivered() {
+                        reassembler.push_chunk(reassembler.next_expected_seq, &chunk);
+                    }
+                    retransmissions = sender.retransmissions;
+                }
+            }
+
+            let elapsed = start.elapsed().as_secs_f64();
+            let reconstructed_sha = reassembler.sha256_digest();
+            let is_match = source_sha == reconstructed_sha;
+
+            println!("Protocol:           {}", proto);
+            println!("Total Chunks:       {}", total_chunks);
+            println!("Transferred Bytes:  {}", file_bytes);
+            println!("Elapsed Time:       {:.4}s", elapsed);
+            println!("Data Retransmits:   {}", retransmissions);
+            println!("SHA-256 Match:      {}", is_match);
+            println!("Channel Stats:      {:?}", channel.stats);
         }
     }
 

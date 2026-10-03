@@ -1,6 +1,6 @@
 // CS-30003: Reliable Data Transfer over UDP
 // Author: Soumyadeb Mukherjee
-// Component: Protocol & ARQ - Packet Framing & Codec
+// Component: Protocol & ARQ - Packet Framing & Codec (RFC 1071 Checksum)
 
 use std::convert::TryFrom;
 use std::fmt;
@@ -12,6 +12,9 @@ pub const HEADER_SIZE: usize = 10;
 
 /// Maximum payload size per UDP packet to ensure datagram fits inside standard 1500-byte MTU.
 pub const MAX_PAYLOAD_SIZE: usize = 1400;
+
+/// Control flag bitmask: Bit 0 indicates packet was retransmitted.
+pub const FLAG_RETRANSMITTED: u8 = 0x01;
 
 /// Represents the type and purpose of a packet.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -37,13 +40,21 @@ impl fmt::Display for PacketError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             PacketError::BufferTooShort { length } => {
-                write!(f, "buffer too short: {} bytes, expected at least {}", length, HEADER_SIZE)
+                write!(
+                    f,
+                    "buffer too short: {} bytes, expected at least {}",
+                    length, HEADER_SIZE
+                )
             }
             PacketError::UnknownPacketType(val) => {
                 write!(f, "unknown packet type: 0x{:02X}", val)
             }
             PacketError::TruncatedPayload { declared, available } => {
-                write!(f, "truncated payload: declared {} bytes, but only {} available", declared, available)
+                write!(
+                    f,
+                    "truncated payload: declared {} bytes, but only {} available",
+                    declared, available
+                )
             }
         }
     }
@@ -73,7 +84,7 @@ pub struct Packet {
     pub pkt_type: PacketType,
     /// Control flags for extensions or retransmissions (default: 0).
     pub flags: u8,
-    /// 16-bit Internet Checksum (computed over header + payload).
+    /// 16-bit Internet Checksum (RFC 1071, computed over header + payload).
     pub checksum: u16,
     /// Raw payload bytes.
     pub payload: Vec<u8>,
@@ -103,6 +114,87 @@ impl Packet {
         }
     }
 
+    /// Creates a new FIN (end-of-transfer) packet.
+    pub fn new_fin(seq_num: u32) -> Self {
+        Packet {
+            seq_num,
+            pkt_type: PacketType::Fin,
+            flags: 0,
+            checksum: 0,
+            payload: Vec::new(),
+        }
+    }
+
+    /// Returns true if this packet was marked as retransmitted.
+    pub fn is_retransmitted(&self) -> bool {
+        (self.flags & FLAG_RETRANSMITTED) != 0
+    }
+
+    /// Marks this packet as a retransmitted packet (for Karn's algorithm detection).
+    pub fn set_retransmitted(&mut self) {
+        self.flags |= FLAG_RETRANSMITTED;
+    }
+
+    /// Computes the RFC 1071 16-bit One's Complement Internet Checksum over header and payload.
+    ///
+    /// Algorithm:
+    /// 1. Checksum field in header is treated as 0.
+    /// 2. Adjacent 8-bit bytes are paired into 16-bit integers (big-endian).
+    /// 3. If payload length is odd, a trailing zero byte is padded.
+    /// 4. 16-bit words are added in a 32-bit accumulator.
+    /// 5. End-around carry is added until sum fits in 16 bits.
+    /// 6. Result is bitwise inverted (one's complement).
+    pub fn compute_checksum(&self) -> u16 {
+        let mut sum: u32 = 0;
+
+        // Header bytes with checksum field = 0
+        let mut header = [0u8; HEADER_SIZE];
+        header[0..4].copy_from_slice(&self.seq_num.to_be_bytes());
+        header[4] = self.pkt_type as u8;
+        header[5] = self.flags;
+        let payload_len = self.payload.len() as u16;
+        header[6..8].copy_from_slice(&payload_len.to_be_bytes());
+        header[8..10].copy_from_slice(&0u16.to_be_bytes()); // Checksum = 0 during calculation
+
+        // Sum header 16-bit words
+        for chunk in header.chunks_exact(2) {
+            let word = u16::from_be_bytes([chunk[0], chunk[1]]);
+            sum = sum.wrapping_add(word as u32);
+        }
+
+        // Sum payload 16-bit words
+        let mut chunks = self.payload.chunks_exact(2);
+        for chunk in chunks.by_ref() {
+            let word = u16::from_be_bytes([chunk[0], chunk[1]]);
+            sum = sum.wrapping_add(word as u32);
+        }
+
+        // If odd byte remaining, pad with zero on the right
+        let remainder = chunks.remainder();
+        if !remainder.is_empty() {
+            let word = u16::from_be_bytes([remainder[0], 0]);
+            sum = sum.wrapping_add(word as u32);
+        }
+
+        // Fold 32-bit sum to 16-bit
+        while (sum >> 16) != 0 {
+            sum = (sum & 0xFFFF) + (sum >> 16);
+        }
+
+        // One's complement
+        !(sum as u16)
+    }
+
+    /// Computes and sets the checksum field in the packet.
+    pub fn compute_and_set_checksum(&mut self) {
+        self.checksum = self.compute_checksum();
+    }
+
+    /// Verifies whether the packet's checksum matches the RFC 1071 computed checksum.
+    pub fn is_valid(&self) -> bool {
+        self.checksum == self.compute_checksum()
+    }
+
     /// Serializes the packet into a byte vector using big-endian (network byte order).
     pub fn to_bytes(&self) -> Vec<u8> {
         let mut buf = Vec::with_capacity(HEADER_SIZE + self.payload.len());
@@ -127,6 +219,11 @@ impl Packet {
         buf.extend_from_slice(&self.payload);
 
         buf
+    }
+
+    /// Alias for `to_bytes`.
+    pub fn serialize(&self) -> Vec<u8> {
+        self.to_bytes()
     }
 
     /// Deserializes a raw byte buffer into a Packet.
@@ -161,6 +258,11 @@ impl Packet {
             checksum,
             payload,
         })
+    }
+
+    /// Alias for `from_bytes`.
+    pub fn deserialize(raw: &[u8]) -> Result<Self, PacketError> {
+        Self::from_bytes(raw)
     }
 }
 
@@ -223,5 +325,16 @@ mod tests {
                 available: 4
             })
         );
+    }
+
+    #[test]
+    fn test_rfc1071_checksum_verification() {
+        let mut pkt = Packet::new_data(10, b"Testing RFC 1071 checksum implementation!".to_vec());
+        pkt.compute_and_set_checksum();
+        assert!(pkt.is_valid());
+
+        // Corrupt a byte
+        pkt.payload[0] ^= 0xFF;
+        assert!(!pkt.is_valid());
     }
 }
