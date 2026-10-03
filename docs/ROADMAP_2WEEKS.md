@@ -1,0 +1,128 @@
+# 2-Week Accelerated Project Roadmap & Task Distribution
+
+**Project:** Reliable Data Transfer over UDP (CS-30003)  
+**Team Lead:** Sahan Maiti  
+**Timeline:** 14 Days (Two 7-Day Sprints)  
+
+---
+
+## 1. Executive Timeline
+
+```
+========================================================================================
+WEEK 1: FOUNDATIONS & VERTICAL SLICE (STOP-AND-WAIT)
+========================================================================================
+Day 1 - 2: Module interfaces finalized, Packet codec completed, Seeded RNG channel stubbed
+Day 3 - 4: Jacobson/Karels RTO implemented, Channel fault injection (Loss + Corrupt) ready
+Day 5 - 6: Stop-and-Wait ARQ end-to-end working over UDP, File transfer loop verified
+Day 7    : Sprint 1 Integration Review: Working file transfer with Stop-and-Wait + SHA-256
+========================================================================================
+WEEK 2: PIPELINED PROTOCOLS, EXPERIMENTAL SUITE & VIVA PREPARATION
+========================================================================================
+Day 8 - 9  : Go-Back-N (GBN) sender & receiver implemented + cumulative ACK handling
+Day 10 - 11: Selective Repeat (SR) sender & receiver + individual buffering + reordering
+Day 12     : Python experiment runner, parameter sweeps (reordering vs loss), plots
+Day 13     : Statistical analysis, confidence intervals, CSV/JSON verification
+Day 14     : Code freeze, viva defense mock, documentation finalization, demo prep
+========================================================================================
+```
+
+---
+
+## 2. Team Responsibility Matrix
+
+| Member | Primary Ownership | Secondary / Integration |
+|---|---|---|
+| **Sahan Maiti** *(Lead)* | System Integration, File I/O, SHA-256, Metrics Logging, Python Testbed, Plots | Architecture, PR Reviews, End-to-End Testing |
+| **Soumyadeb Mukherjee** | Protocol & ARQ State Machines (`packet.rs`, `sw.rs`, `gbn.rs`, `sr.rs`) | Conformance testing, RFC 1071 Checksum |
+| **Kashish Gupta** | Retransmission Timing & RTO (`rto.rs`, `timer.rs`, Jacobson/Karels, Karn) | Timer unit tests, timeout backoff |
+| **Ashwika Burman** | Deterministic Channel Emulator (`channel.rs`, Loss/Drop/Corrupt/Reorder) | Seed repeatability, channel stress tests |
+
+---
+
+## 3. Sprint 1 Breakdown (Week 1: Days 1 – 7)
+
+### Track A: Soumyadeb Mukherjee (Protocol & ARQ)
+- [ ] Complete `src/packet.rs`: Implement RFC 1071 16-bit Internet Checksum calculation & validation.
+- [ ] Implement `FIN` packet semantics and serialization in `packet.rs`.
+- [ ] Build `src/arq/sw.rs`: Stop-and-Wait sender and receiver state machines.
+- [ ] Define the `ArqSender` and `ArqReceiver` traits in `src/arq/mod.rs` for pluggability.
+- [ ] Deliver unit tests demonstrating:
+  - Valid packet roundtrip with checksum verification.
+  - Drop handling on checksum mismatch.
+  - S&W state machine handling of delayed and duplicate ACKs.
+
+### Track B: Kashish Gupta (Timing & RTO)
+- [ ] Build `src/timing/rto.rs`: Implement Jacobson/Karels RTO estimator (RFC 6298):
+  - Initial RTO = 1.0s (or configurable).
+  - First RTT sample: $SRTT = R, RTTVAR = R / 2, RTO = SRTT + \max(G, 4 \times RTTVAR)$.
+  - Subsequent samples: update $RTTVAR$ and $SRTT$.
+  - Karn's Algorithm: do not sample RTT for retransmitted packets.
+  - Exponential timer backoff on retransmission ($RTO = \min(RTO \times 2, RTO_{max})$).
+- [ ] Build `src/timing/timer.rs`: Non-blocking retransmission timer abstraction.
+- [ ] Deliver unit tests verifying RTO bounds, smoothing behavior, and backoff limits.
+
+### Track C: Ashwika Burman (Channel Emulator)
+- [ ] Build `src/channel/mod.rs` and `src/channel/emulator.rs`.
+- [ ] Implement deterministic PRNG using standard seeded generator (e.g., PCG32 or seeded standard RNG).
+- [ ] Implement fault injection mechanisms:
+  - **Packet Loss**: drop datagram with probability $P_{loss}$.
+  - **Bit Corruption**: flip random bits in payload/header with probability $P_{corrupt}$.
+  - **Packet Duplication**: duplicate datagram with probability $P_{dup}$.
+  - **Delay & Jitter**: add fixed delay + uniform/normal jitter.
+  - **Packet Reordering**: buffer packets with small random delays before release.
+- [ ] Deliver unit tests verifying: same seed produces the exact identical sequence of drops/corruptions.
+
+### Track D: Sahan Maiti (Lead — Integration & Harness)
+- [ ] Set up project structure, modules in `src/lib.rs`, and dependencies in `Cargo.toml`.
+- [ ] Build file chunker (reading files in 1400-byte chunks) and file reassembler in `src/app/`.
+- [ ] Build SHA-256 end-to-end checksum verification tool.
+- [ ] Integrate Stop-and-Wait with UDP socket loop + Channel emulator for Day 7 milestone.
+- [ ] Set up `results/raw/` schema (JSON/CSV) for logging metrics (throughput, retransmissions, RTT, elapsed time).
+
+---
+
+## 4. Sprint 2 Breakdown (Week 2: Days 8 – 14)
+
+### Soumyadeb Mukherjee
+- [ ] Build Go-Back-N (`src/arq/gbn.rs`): window management, cumulative ACKs, timer restart on oldest unACKed packet.
+- [ ] Build Selective Repeat (`src/arq/sr.rs`): sender & receiver sliding windows, individual ACKs, out-of-order receive buffer.
+- [ ] Validate invariant: window size $W \le 2^{31} - 1$ (or $W \le \text{SeqSpace} / 2$).
+
+### Kashish Gupta
+- [ ] Adapt RTO estimator for pipelined protocols (tracking timestamps per in-flight packet).
+- [ ] Implement multi-timer management for Selective Repeat (individual packet deadlines).
+- [ ] Benchmark RTO accuracy vs fixed static timeouts under simulated jitter.
+
+### Ashwika Burman
+- [ ] Stress-test channel emulator under combined fault profiles (e.g., 5% loss + 10% reordering + 20ms jitter).
+- [ ] Create pre-configured experiment profiles in `configs/experiments/`.
+- [ ] Verify zero memory leaks or unbounded buffer growth in reordering queues.
+
+### Sahan Maiti (Lead)
+- [ ] Wire CLI commands in `src/main.rs` (`reliable_udp send/recv/experiment`).
+- [ ] Write Python automation script `experiments/python/run_experiments.py`.
+- [ ] Run parameter sweep: Reordering Rate (0% to 25%) across Stop-and-Wait, GBN, and SR.
+- [ ] Generate comparative plots: Retransmissions vs Reordering, Goodput vs Loss.
+- [ ] Write final report, prepare viva answers, and conduct dry run.
+
+---
+
+## 5. Git & Collaboration Rules
+
+1. **Main is Protected**: Never push directly to `main`. All work enters via Pull Request.
+2. **Branch Naming**:
+   - `feature/arq-<protocol>` (Soumyadeb)
+   - `feature/timing-<module>` (Kashish)
+   - `feature/channel-<module>` (Ashwika)
+   - `feature/integration-<module>` (Sahan)
+3. **Commit Format**:
+   - `feat(scope): concise description`
+   - `fix(scope): fix bug description`
+   - `test(scope): add tests for feature`
+   - `docs(scope): update documentation`
+4. **Acceptance Criteria for PRs**:
+   - All code compiles cleanly (`cargo check`).
+   - All tests pass (`cargo test`).
+   - No compiler warnings allowed (`#[deny(warnings)]`).
+   - At least 1 peer review approval (Lead review required).
