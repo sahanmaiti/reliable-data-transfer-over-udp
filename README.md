@@ -21,13 +21,25 @@ A modular and reproducible reliable file-transfer system built on raw UDP datagr
 
 ---
 
+**CS-30003 · Coding Assignment 1 · Path A (catalogue)**  
+**P3 — Reliable Data Transfer over UDP · Section CSE 33**
+
+| | |
+|---|---|
+| **Repository** | [github.com/sahanmaiti/reliable-data-transfer-over-udp](https://github.com/sahanmaiti/reliable-data-transfer-over-udp) |
+| **Team** | Ashwika Burman (24155095) · Sahan Maiti (24052247) · Soumyadeb Mukherjee (24052329) · Kashish Gupta (24052495) |
+
+The three ARQ protocols are **selected at runtime** on the same application and shared packet format.
+
+---
+
 ## What is Reliable Data Transfer over UDP?
 
 UDP provides a lightweight datagram transport, but it does not guarantee that packets will arrive, arrive only once, arrive in order, or remain unmodified.
 
 This project builds a **reliable file-transfer layer on top of raw UDP sockets**.
 
-The system implements three interchangeable Automatic Repeat reQuest (ARQ) protocols:
+The system implements three **runtime-selectable** interchangeable Automatic Repeat reQuest (ARQ) protocols:
 
 - **Stop-and-Wait** — one packet in flight at a time
 - **Go-Back-N** — fixed sender window with cumulative acknowledgements
@@ -79,29 +91,17 @@ Reproducible Experiments
 
 ## Core Deliverables
 
-The final system provides:
+The final system provides (per approved proposal):
 
-- Stop-and-Wait ARQ
-- Go-Back-N ARQ
-- Selective Repeat ARQ
-- Common packet framing
-- Sequence numbers
-- Checksums
-- Source-file chunking and reassembly
-- Duplicate packet and ACK handling
-- Guaranteed in-order application delivery
-- Adaptive Jacobson/Karels RTO estimation
-- SRTT and RTTVAR tracking
-- Karn's algorithm
-- Exponential timeout backoff
-- Deterministic seeded channel emulation
-- Loss, duplication, corruption, reordering, delay, and jitter
-- SHA-256 end-to-end integrity verification
-- Rust-generated JSON/CSV raw results
-- Python experiment automation
-- Statistical analysis
-- Confidence intervals
-- Experimental plots
+- **Stop-and-Wait:** one packet in flight with acknowledgement and timeout-based retransmission.
+- **Go-Back-N:** fixed sender window, cumulative ACKs, and retransmission of the outstanding packets after a timeout.
+- **Selective Repeat:** sender and receiver buffering, individual ACKs, a receiver window, and retransmission of only the required packets.
+- **Common packet framing** (sequence number, checksum, length, flag/type) with source-file chunking and reassembly.
+- Duplicate ACK and duplicate packet handling with **guaranteed in-order delivery** to the application layer.
+- Adaptive retransmission timers using **Jacobson/Karels** estimation with SRTT, RTTVAR, exponential backoff, and **Karn's algorithm**.
+- **Deterministic channel emulator** with seeded loss, duplication, reordering, corruption, delay, and jitter.
+- **SHA-256** comparison of source and received files for end-to-end integrity.
+- **Rust-generated JSON/CSV** raw results consumed by a **Python** experiment and analysis pipeline (automation, statistical analysis, plots for goodput, retransmissions, window size, reordering, and RTO sensitivity).
 
 ---
 
@@ -483,6 +483,8 @@ The system also tracks **unique application bytes** so retransmitted or duplicat
 
 # The Experimental Claim
 
+### Primary claim
+
 The primary claim tested by this project is:
 
 > **Under identical controlled conditions, Selective Repeat will require fewer data retransmissions than Go-Back-N as packet reordering increases.**
@@ -496,11 +498,17 @@ The reasoning is based on the fundamental difference between the two protocols:
 
 The experiment is designed to measure whether this difference becomes increasingly visible as packet reordering increases.
 
+### Secondary claim (RTO study)
+
+Scale the computed adaptive RTO by a fixed multiplier while holding Jacobson/Karels alpha and beta constant, and measure the trade-off between **premature retransmissions** and **delayed recovery from genuine loss**. See **E4 — RTO Sensitivity** below.
+
 ---
 
 # Experiments
 
-## E1 — Retransmissions vs Packet Reordering
+Experiments are grouped by the **approved proposal** (primary and secondary claims) and **catalogue requirements** (Path A P3 core experiments).
+
+## E1 — Retransmissions vs Packet Reordering (primary claim)
 
 This is the **primary experiment** of the project.
 
@@ -555,11 +563,11 @@ with:
 
 ---
 
-## E2 — Goodput vs Window Size
+## E2 — Goodput vs Window Size (catalogue experiment)
 
-This experiment studies how sender window size affects transfer performance.
+This **catalogue-required** experiment studies how sender window size affects transfer performance for all three protocols.
 
-Example window sizes:
+Example window sizes (configurable; not fixed by the proposal):
 
 ```text
 1
@@ -584,9 +592,9 @@ The experiment allows the behavior of the three ARQ protocols to be compared as 
 
 ---
 
-## E3 — Goodput vs Packet Loss
+## E3 — Goodput vs Packet Loss (catalogue experiment)
 
-This experiment studies protocol behavior as the underlying network becomes increasingly lossy.
+This **catalogue-required** experiment studies protocol behavior as the underlying network becomes increasingly lossy.
 
 ### Independent Variable
 
@@ -604,24 +612,19 @@ All protocols are evaluated under matched experimental conditions.
 
 ---
 
-## E4 — RTO Sensitivity
+## E4 — RTO Sensitivity (secondary claim)
 
-The adaptive RTO produced by the Jacobson/Karels estimator is scaled using a controlled multiplier.
+This is the **secondary RTO study** from the proposal.
 
-Example multipliers include:
+The computed adaptive RTO is scaled by a **fixed multiplier** (for example **0.5× to 3×**) while Jacobson/Karels **alpha and beta stay constant**. The goal is to measure the trade-off between premature retransmissions and delayed recovery from genuine loss.
+
+Example multipliers (configurable):
 
 ```text
 0.5×
-0.75×
 1.0×
-1.5×
-2.0×
 3.0×
 ```
-
-The exact values are experiment-configurable.
-
-The Jacobson/Karels estimator parameters, including alpha and beta, remain fixed.
 
 ### Measured
 
@@ -929,6 +932,8 @@ SHA-256 integrity
 
 # Repository Structure
 
+The layout below is the **target** project structure. Directories and files appear as components land according to the weekly plan (ARQ, timing, and channel work may still be in progress).
+
 ```text
 .
 ├── README.md
@@ -1085,13 +1090,12 @@ Required reliability mechanisms, correctness tests, and mandatory experiments ta
 
 Stretch features are considered only after the core system, correctness tests, and required experiments are stable.
 
-Possible extensions include:
+Possible extensions (assignment catalogue stretch, after Core is solid):
 
-- Additional SACK representations
-- Additional flow-control mechanisms
-- Connection setup/teardown
-- Nagle-style packet coalescing
-- Additional network impairment models
+- SACK blocks
+- A sliding-window flow-control layer
+- Connection setup and teardown
+- Nagle-style coalescing
 
 ---
 
@@ -1160,35 +1164,32 @@ The intended workflow is:
 
 # Project Workflow
 
-The development plan follows the final project proposal:
+The development plan follows the **approved proposal** (rough schedule; not a claim that each week is complete):
 
-```text
-Week 1
-Interfaces, packet header design, proposal, repository setup
-        ↓
-Week 2
-Packet codec, channel, timer, metrics foundations
-        ↓
-Week 3
-Stop-and-Wait + first fault-injection results
-        ↓
-Week 4
-Go-Back-N integration and fault testing
-        ↓
-Week 5
-Selective Repeat + combined-fault testing
-        ↓
-Week 6
-Experiment runner + pilot studies + first plots
-        ↓
-Week 7
-Final experiment matrix + statistics + regression fixes
-        ↓
-Week 8
-Final validation + documentation + demo + viva preparation
-```
+| Week | Target | Owner / responsibility |
+|------|--------|-------------------------|
+| **1** | Interfaces, packet header design, proposal, and repository setup. | All members — initial setup, repository, proposal, and interface agreement. |
+| **2** | Packet codec, channel emulator, timer, and metrics foundations; Rust/Python result interface; vertical slice with one ARQ protocol end-to-end on a simple channel. | Soumyadeb — ARQ/protocol foundations and packet semantics; Kashish — timer foundations and RTO design; Ashwika — channel emulator foundations; Sahan — metrics, integration, and Rust/Python result interface. |
+| **3** | Stop-and-Wait complete; timing and emulator faults integrated; first basic results. | Soumyadeb — Stop-and-Wait and protocol testing; Kashish — retransmission timers and RTO integration; Ashwika — fault injection and emulator testing; Sahan — initial results, metrics, and end-to-end validation. |
+| **4** | Go-Back-N integration and testing under channel faults. | Soumyadeb — Go-Back-N window and cumulative-ACK logic; Kashish — timer/RTO integration and timeout testing; Ashwika — fault testing under loss, duplication, reordering, and delay; Sahan — integration, validation, and result collection. |
+| **5** | Selective Repeat integration, combined-fault testing, and Core correctness gate. | Soumyadeb — Selective Repeat buffering, receiver window, and individual ACKs; Kashish — timing/RTO support and timeout testing; Ashwika — combined-fault testing and emulator validation; Sahan — end-to-end validation and integrity checks. |
+| **6** | Experiment runner, pilot studies, and first plots. | Sahan — Python experiment automation, parameter sweeps, result processing, and initial plots; Soumyadeb and Ashwika — protocol-specific support and debugging; Kashish — timing/RTO support for experiments. |
+| **7** | Final experiment matrix, statistical analysis, and regression fixes. | Sahan — final experiments, statistical analysis, confidence intervals, and plots; Soumyadeb — protocol debugging and regression testing; Kashish — timer/RTO regression testing; Ashwika — channel emulator and fault-model regression testing. |
+| **8** | Final validation, documentation, AI-USE.md, demo, and individual viva practice. | All members — final integration, documentation, demo preparation, validation, and viva preparation. |
 
 The project prioritizes a working vertical slice early so that integration problems are discovered before the full experimental phase.
+
+---
+
+# Risks and Fallbacks
+
+From the approved proposal:
+
+| Risk | Fallback |
+|------|----------|
+| **Timer races and stale expiry** | Use one timer-scheduling mechanism, timer-generation IDs, and controlled-clock tests; fall back to a simpler serialized event loop if needed. |
+| **Combined-fault integration** | Build an early vertical slice with weekly clean and fault checkpoints; prioritize Core correctness if time is short. |
+| **Rust/Python interface mismatch** | Define and test a stable JSON/CSV result schema early. |
 
 ---
 
@@ -1196,11 +1197,11 @@ The project prioritizes a working vertical slice early so that integration probl
 
 This project is developed as:
 
-**P3 — Reliable Data Transfer over UDP**
+**P3 — Reliable Data Transfer over UDP** (Path A, catalogue)
 
 for:
 
-**CS-30003 • Coding Assignment 1**
+**CS-30003 • Coding Assignment 1 • Section CSE 33**
 
 The project focuses on demonstrating:
 
@@ -1222,12 +1223,12 @@ The project focuses on demonstrating:
 
 # Team
 
-| Member | Responsibility |
-|---|---|
-| **Soumyadeb Mukherjee** | Protocol & ARQ — packet format and semantics, Stop-and-Wait, Go-Back-N, Selective Repeat, protocol-state and conformance testing |
-| **Kashish Gupta** | Timing & RTO — retransmission timers, Jacobson/Karels RTO, SRTT, RTTVAR, Karn's algorithm, timing and timeout tests |
-| **Ashwika Burman** | Channel Emulator — deterministic loss, duplication, reordering, corruption, delay/jitter, seed replay, emulator testing |
-| **Sahan Maiti** | Evaluation & Integration — Rust/Python experiment interface, experiment automation, metrics, raw-result logging, statistical analysis, plots, integrity checks, end-to-end validation |
+| Member | Roll | Responsibility |
+|---|---|---|
+| **Soumyadeb Mukherjee** | 24052329 | Protocol & ARQ — packet format and semantics, Stop-and-Wait, Go-Back-N, Selective Repeat, protocol-state and conformance testing |
+| **Kashish Gupta** | 24052495 | Timing & RTO — retransmission timers, Jacobson/Karels RTO, SRTT, RTTVAR, Karn's algorithm, timing and timeout tests |
+| **Ashwika Burman** | 24155095 | Channel Emulator — deterministic loss, duplication, reordering, corruption, delay/jitter, seed replay, emulator testing |
+| **Sahan Maiti** | 24052247 | Evaluation & Integration — Rust/Python experiment interface, experiment automation, metrics, raw-result logging, statistical analysis, plots, integrity checks, end-to-end validation |
 
 All members contribute to:
 
