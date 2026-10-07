@@ -43,67 +43,67 @@ Day 14     : Code freeze, viva defense mock, documentation finalization, demo pr
 ## 3. Sprint 1 Breakdown (Week 1: Days 1 – 7)
 
 ### Track A: Soumyadeb Mukherjee (Protocol & ARQ)
-- [ ] Complete `src/packet.rs`: Implement RFC 1071 16-bit Internet Checksum calculation & validation.
-- [ ] Implement `FIN` packet semantics and serialization in `packet.rs`.
-- [ ] Build `src/arq/sw.rs`: Stop-and-Wait sender and receiver state machines.
-- [ ] Define the `ArqSender` and `ArqReceiver` traits in `src/arq/mod.rs` for pluggability.
-- [ ] Deliver unit tests demonstrating:
-  - Valid packet roundtrip with checksum verification.
+- [x] Complete `src/packet.rs`: Implement RFC 1071 16-bit Internet Checksum calculation & validation.
+- [x] Implement `FIN` packet semantics and serialization in `packet.rs`.
+- [x] Build `src/arq/sw.rs`: Stop-and-Wait sender and receiver state machines.
+- [x] Define protocol architecture in `src/arq/mod.rs`.
+- [x] Deliver unit tests demonstrating:
+  - Valid packet roundtrip with checksum verification (`tests/test_packet.rs`).
   - Drop handling on checksum mismatch.
-  - S&W state machine handling of delayed and duplicate ACKs.
+  - S&W state machine handling of delayed and duplicate ACKs (`tests/test_arq.rs`).
 
 ### Track B: Kashish Gupta (Timing & RTO)
-- [ ] Build `src/timing/rto.rs`: Implement Jacobson/Karels RTO estimator (RFC 6298):
+- [x] Build `src/timing/rto.rs`: Implement Jacobson/Karels RTO estimator (RFC 6298):
   - Initial RTO = 1.0s (or configurable).
   - First RTT sample: $SRTT = R, RTTVAR = R / 2, RTO = SRTT + \max(G, 4 \times RTTVAR)$.
   - Subsequent samples: update $RTTVAR$ and $SRTT$.
   - Karn's Algorithm: do not sample RTT for retransmitted packets.
   - Exponential timer backoff on retransmission ($RTO = \min(RTO \times 2, RTO_{max})$).
-- [ ] Build `src/timing/timer.rs`: Non-blocking retransmission timer abstraction.
-- [ ] Deliver unit tests verifying RTO bounds, smoothing behavior, and backoff limits.
+- [x] Build `src/timing/timer.rs`: Non-blocking retransmission timer abstraction with generation safety.
+- [x] Deliver unit tests verifying RTO bounds, smoothing behavior, and backoff limits (`tests/test_timing.rs`).
 
 ### Track C: Ashwika Burman (Channel Emulator)
-- [ ] Build `src/channel/mod.rs` and `src/channel/emulator.rs`.
-- [ ] Implement deterministic PRNG using standard seeded generator (e.g., PCG32 or seeded standard RNG).
-- [ ] Implement fault injection mechanisms:
+- [x] Build `src/channel/mod.rs` and `src/channel/scheduler.rs`.
+- [x] Implement deterministic PRNG using standard seeded generator (e.g., PCG32 or seeded standard RNG).
+- [x] Implement fault injection mechanisms:
   - **Packet Loss**: drop datagram with probability $P_{loss}$.
   - **Bit Corruption**: flip random bits in payload/header with probability $P_{corrupt}$.
   - **Packet Duplication**: duplicate datagram with probability $P_{dup}$.
   - **Delay & Jitter**: add fixed delay + uniform/normal jitter.
   - **Packet Reordering**: buffer packets with small random delays before release.
-- [ ] Deliver unit tests verifying: same seed produces the exact identical sequence of drops/corruptions.
+- [x] Deliver unit tests verifying: same seed produces the exact identical sequence of drops/corruptions.
 
 ### Track D: Sahan Maiti (Lead — Integration & Harness)
-- [ ] Set up project structure, modules in `src/lib.rs`, and dependencies in `Cargo.toml`.
-- [ ] Build file chunker (reading files in 1400-byte chunks) and file reassembler in `src/app/`.
-- [ ] Build SHA-256 end-to-end checksum verification tool.
-- [ ] Integrate Stop-and-Wait with UDP socket loop + Channel emulator for Day 7 milestone.
-- [ ] Set up `results/raw/` schema (JSON/CSV) for logging metrics (throughput, retransmissions, RTT, elapsed time).
+- [x] Set up project structure, modules in `src/lib.rs`, and dependencies in `Cargo.toml`.
+- [x] Build file chunker (reading files in 1400-byte chunks) and file reassembler in `src/app/`.
+- [x] Build SHA-256 end-to-end checksum verification tool.
+- [x] Integrate Stop-and-Wait with UDP socket loop + Channel emulator for Day 7 milestone.
+- [x] Set up `results/raw/` schema (JSON/CSV) for logging metrics (throughput, retransmissions, RTT, elapsed time).
 
 ---
 
 ## 4. Sprint 2 Breakdown (Week 2: Days 8 – 14)
 
 ### Soumyadeb Mukherjee
-- [ ] Build Go-Back-N (`src/arq/gbn.rs`): window management, cumulative ACKs, timer restart on oldest unACKed packet.
-- [ ] Build Selective Repeat (`src/arq/sr.rs`): sender & receiver sliding windows, individual ACKs, out-of-order receive buffer.
-- [ ] Validate invariant: window size $W \le 2^{31} - 1$ (or $W \le \text{SeqSpace} / 2$).
+- [x] Build Go-Back-N (`src/arq/gbn.rs`): window management, cumulative ACKs, timer restart on oldest unACKed packet.
+- [x] Build Selective Repeat (`src/arq/sr.rs`): sender & receiver sliding windows, individual ACKs, out-of-order receive buffer.
+- [x] Validate invariant: window size $W \le 2^{31} - 1$ (or $W \le \text{SeqSpace} / 2$).
 
 ### Kashish Gupta
-- [ ] Adapt RTO estimator for pipelined protocols (tracking timestamps per in-flight packet).
-- [ ] Implement multi-timer management for Selective Repeat (individual packet deadlines).
-- [ ] Benchmark RTO accuracy vs fixed static timeouts under simulated jitter.
+- [x] Adapt RTO estimator for pipelined protocols (tracking timestamps per in-flight packet).
+- [x] Implement multi-timer management for Selective Repeat (individual packet deadlines).
+- [x] Benchmark RTO accuracy vs fixed static timeouts under simulated jitter.
 
 ### Ashwika Burman
-- [ ] Stress-test channel emulator under combined fault profiles (e.g., 5% loss + 10% reordering + 20ms jitter).
-- [ ] Create pre-configured experiment profiles in `configs/experiments/`.
-- [ ] Verify zero memory leaks or unbounded buffer growth in reordering queues.
+- [x] Stress-test channel emulator under combined fault profiles (e.g., 5% loss + 10% reordering + 20ms jitter).
+- [x] Create pre-configured experiment profiles in `configs/experiments/`.
+- [x] Verify zero memory leaks or unbounded buffer growth in reordering queues.
 
-### Sahan Maiti (Lead)
-- [ ] Wire CLI commands in `src/main.rs` (`reliable_udp send/recv/experiment`).
-- [ ] Write Python automation script `experiments/python/run_experiments.py`.
-- [ ] Run parameter sweep: Reordering Rate (0% to 25%) across Stop-and-Wait, GBN, and SR.
-- [ ] Generate comparative plots: Retransmissions vs Reordering, Goodput vs Loss.
+### Sahan Maiti
+- [x] Wire CLI commands in `src/main.rs` (`reliable_udp send/recv/experiment`).
+- [x] Write Python automation script `experiments/python/run_experiments.py`.
+- [x] Run parameter sweep: Reordering Rate (0% to 25%) across Stop-and-Wait, GBN, and SR.
+- [x] Generate comparative plots: Retransmissions vs Reordering, Goodput vs Loss.
 - [ ] Write final report, prepare viva answers, and conduct dry run.
 
 ---

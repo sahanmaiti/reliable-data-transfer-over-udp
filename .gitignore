@@ -10,9 +10,17 @@ __pycache__/
 .venv/
 venv/
 env/
+experiments/python/plots/
+experiments/python/results/
 
 # IDE & OS files
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Local private notes (kept only on local PC)
+MY_WORK_EXPLANATION.md
+docs/MY_WORK_EXPLANATION.md
+*PRIVATE*
+*.local.md
