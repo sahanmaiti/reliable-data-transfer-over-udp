@@ -1,0 +1,4007 @@
+[
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m0.50_s101_t1",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 101,
+      "reverse_seed": 102,
+      "trial_id": 1
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.102747316,
+      "total_rtt_samples": 51,
+      "karn_rejected_count": 49,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 1.1e-05,
+      "final_rto_ms": 20.5,
+      "timeout_count": 49,
+      "backoff_count": 49
+    },
+    "protocol": {
+      "data_sent": 149,
+      "ack_sent": 144,
+      "data_received": 144,
+      "ack_received": 144,
+      "data_retransmissions": 49,
+      "timeout_retransmissions": 49,
+      "premature_retransmissions": 46,
+      "duplicate_data_received": 44,
+      "duplicate_acks_received": 44
+    },
+    "channel": {
+      "offered_datagrams": 149,
+      "dropped_datagrams": 5,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 144
+    },
+    "reverse_channel": {
+      "offered_datagrams": 144,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 144
+    },
+    "goodput_bytes_sec": 34123.47610442017,
+    "retransmission_ratio": 0.3288590604026846
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m0.50_s202_t2",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 202,
+      "reverse_seed": 203,
+      "trial_id": 2
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.2465,
+      "total_rtt_samples": 50,
+      "karn_rejected_count": 50,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 1.4999999999999999e-05,
+      "final_rto_ms": 20.5,
+      "timeout_count": 51,
+      "backoff_count": 51
+    },
+    "protocol": {
+      "data_sent": 151,
+      "ack_sent": 144,
+      "data_received": 144,
+      "ack_received": 144,
+      "data_retransmissions": 51,
+      "timeout_retransmissions": 51,
+      "premature_retransmissions": 45,
+      "duplicate_data_received": 44,
+      "duplicate_acks_received": 44
+    },
+    "channel": {
+      "offered_datagrams": 151,
+      "dropped_datagrams": 7,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 144
+    },
+    "reverse_channel": {
+      "offered_datagrams": 144,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 144
+    },
+    "goodput_bytes_sec": 32968.32685741199,
+    "retransmission_ratio": 0.33774834437086093
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m0.50_s303_t3",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 303,
+      "reverse_seed": 304,
+      "trial_id": 3
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.2465,
+      "total_rtt_samples": 50,
+      "karn_rejected_count": 50,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 1.4999999999999999e-05,
+      "final_rto_ms": 41.0,
+      "timeout_count": 51,
+      "backoff_count": 51
+    },
+    "protocol": {
+      "data_sent": 151,
+      "ack_sent": 139,
+      "data_received": 139,
+      "ack_received": 139,
+      "data_retransmissions": 51,
+      "timeout_retransmissions": 51,
+      "premature_retransmissions": 44,
+      "duplicate_data_received": 39,
+      "duplicate_acks_received": 39
+    },
+    "channel": {
+      "offered_datagrams": 151,
+      "dropped_datagrams": 12,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 139
+    },
+    "reverse_channel": {
+      "offered_datagrams": 139,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 139
+    },
+    "goodput_bytes_sec": 32968.32685741199,
+    "retransmission_ratio": 0.33774834437086093
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m0.50_s404_t4",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 404,
+      "reverse_seed": 405,
+      "trial_id": 4
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.0825,
+      "total_rtt_samples": 51,
+      "karn_rejected_count": 49,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 1.1e-05,
+      "final_rto_ms": 20.5,
+      "timeout_count": 49,
+      "backoff_count": 49
+    },
+    "protocol": {
+      "data_sent": 149,
+      "ack_sent": 145,
+      "data_received": 145,
+      "ack_received": 145,
+      "data_retransmissions": 49,
+      "timeout_retransmissions": 49,
+      "premature_retransmissions": 46,
+      "duplicate_data_received": 45,
+      "duplicate_acks_received": 45
+    },
+    "channel": {
+      "offered_datagrams": 149,
+      "dropped_datagrams": 4,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 145
+    },
+    "reverse_channel": {
+      "offered_datagrams": 145,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 145
+    },
+    "goodput_bytes_sec": 34292.712798530316,
+    "retransmission_ratio": 0.3288590604026846
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m0.50_s505_t5",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 505,
+      "reverse_seed": 506,
+      "trial_id": 5
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.124138154,
+      "total_rtt_samples": 51,
+      "karn_rejected_count": 49,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 1.1e-05,
+      "final_rto_ms": 20.5,
+      "timeout_count": 49,
+      "backoff_count": 49
+    },
+    "protocol": {
+      "data_sent": 149,
+      "ack_sent": 142,
+      "data_received": 142,
+      "ack_received": 142,
+      "data_retransmissions": 49,
+      "timeout_retransmissions": 49,
+      "premature_retransmissions": 44,
+      "duplicate_data_received": 42,
+      "duplicate_acks_received": 42
+    },
+    "channel": {
+      "offered_datagrams": 149,
+      "dropped_datagrams": 7,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 142
+    },
+    "reverse_channel": {
+      "offered_datagrams": 142,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 142
+    },
+    "goodput_bytes_sec": 33946.48645904698,
+    "retransmission_ratio": 0.3288590604026846
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m1.00_s101_t1",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 101,
+      "reverse_seed": 102,
+      "trial_id": 1
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.149039188,
+      "total_rtt_samples": 96,
+      "karn_rejected_count": 4,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 4,
+      "backoff_count": 4
+    },
+    "protocol": {
+      "data_sent": 104,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 4,
+      "timeout_retransmissions": 4,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 104,
+      "dropped_datagrams": 4,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 33742.751913482294,
+    "retransmission_ratio": 0.038461538461538464
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m1.00_s202_t2",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 202,
+      "reverse_seed": 203,
+      "trial_id": 2
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.103,
+      "total_rtt_samples": 97,
+      "karn_rejected_count": 3,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 3,
+      "backoff_count": 3
+    },
+    "protocol": {
+      "data_sent": 103,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 3,
+      "timeout_retransmissions": 3,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 103,
+      "dropped_datagrams": 3,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 34121.37460394833,
+    "retransmission_ratio": 0.02912621359223301
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m1.00_s303_t3",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 303,
+      "reverse_seed": 304,
+      "trial_id": 3
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.598505082,
+      "total_rtt_samples": 92,
+      "karn_rejected_count": 8,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 10,
+      "backoff_count": 10
+    },
+    "protocol": {
+      "data_sent": 110,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 10,
+      "timeout_retransmissions": 10,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 110,
+      "dropped_datagrams": 10,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 30444.67658587661,
+    "retransmission_ratio": 0.09090909090909091
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m1.00_s404_t4",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 404,
+      "reverse_seed": 405,
+      "trial_id": 4
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.021,
+      "total_rtt_samples": 99,
+      "karn_rejected_count": 1,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 1,
+      "backoff_count": 1
+    },
+    "protocol": {
+      "data_sent": 101,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 1,
+      "timeout_retransmissions": 1,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 101,
+      "dropped_datagrams": 1,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 34817.20964934096,
+    "retransmission_ratio": 0.009900990099009901
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m1.00_s505_t5",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 505,
+      "reverse_seed": 506,
+      "trial_id": 5
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.226,
+      "total_rtt_samples": 95,
+      "karn_rejected_count": 5,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 5,
+      "backoff_count": 5
+    },
+    "protocol": {
+      "data_sent": 105,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 5,
+      "timeout_retransmissions": 5,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 105,
+      "dropped_datagrams": 5,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 33128.25366777094,
+    "retransmission_ratio": 0.047619047619047616
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m3.00_s101_t1",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 101,
+      "reverse_seed": 102,
+      "trial_id": 1
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.487117564,
+      "total_rtt_samples": 96,
+      "karn_rejected_count": 4,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 4,
+      "backoff_count": 4
+    },
+    "protocol": {
+      "data_sent": 104,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 4,
+      "timeout_retransmissions": 4,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 104,
+      "dropped_datagrams": 4,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 31200.430566654974,
+    "retransmission_ratio": 0.038461538461538464
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m3.00_s202_t2",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 202,
+      "reverse_seed": 203,
+      "trial_id": 2
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.349,
+      "total_rtt_samples": 97,
+      "karn_rejected_count": 3,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 3,
+      "backoff_count": 3
+    },
+    "protocol": {
+      "data_sent": 103,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 3,
+      "timeout_retransmissions": 3,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 103,
+      "dropped_datagrams": 3,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 32191.308346746377,
+    "retransmission_ratio": 0.02912621359223301
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m3.00_s303_t3",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 303,
+      "reverse_seed": 304,
+      "trial_id": 3
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 5.835515246,
+      "total_rtt_samples": 92,
+      "karn_rejected_count": 8,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 10,
+      "backoff_count": 10
+    },
+    "protocol": {
+      "data_sent": 110,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 10,
+      "timeout_retransmissions": 10,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 110,
+      "dropped_datagrams": 10,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 23991.026344411337,
+    "retransmission_ratio": 0.09090909090909091
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m3.00_s404_t4",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 404,
+      "reverse_seed": 405,
+      "trial_id": 4
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.103,
+      "total_rtt_samples": 99,
+      "karn_rejected_count": 1,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 1,
+      "backoff_count": 1
+    },
+    "protocol": {
+      "data_sent": 101,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 1,
+      "timeout_retransmissions": 1,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 101,
+      "dropped_datagrams": 1,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 34121.37460394833,
+    "retransmission_ratio": 0.009900990099009901
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_StopAndWait_m3.00_s505_t5",
+      "protocol": "StopAndWait",
+      "window_size": 1,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 505,
+      "reverse_seed": 506,
+      "trial_id": 5
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 4.718,
+      "total_rtt_samples": 95,
+      "karn_rejected_count": 5,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 5,
+      "backoff_count": 5
+    },
+    "protocol": {
+      "data_sent": 105,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 5,
+      "timeout_retransmissions": 5,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 105,
+      "dropped_datagrams": 5,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 29673.59050445104,
+    "retransmission_ratio": 0.047619047619047616
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m0.50_s101_t1",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 101,
+      "reverse_seed": 102,
+      "trial_id": 1
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.59755261,
+      "total_rtt_samples": 48,
+      "karn_rejected_count": 52,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.7e-05,
+      "final_rto_ms": 82.0,
+      "timeout_count": 8,
+      "backoff_count": 8
+    },
+    "protocol": {
+      "data_sent": 153,
+      "ack_sent": 147,
+      "data_received": 147,
+      "ack_received": 147,
+      "data_retransmissions": 53,
+      "timeout_retransmissions": 53,
+      "premature_retransmissions": 23,
+      "duplicate_data_received": 32,
+      "duplicate_acks_received": 47
+    },
+    "channel": {
+      "offered_datagrams": 153,
+      "dropped_datagrams": 6,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 147
+    },
+    "reverse_channel": {
+      "offered_datagrams": 147,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 147
+    },
+    "goodput_bytes_sec": 234288.9942360054,
+    "retransmission_ratio": 0.3464052287581699
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m0.50_s202_t2",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 202,
+      "reverse_seed": 203,
+      "trial_id": 2
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.6035,
+      "total_rtt_samples": 49,
+      "karn_rejected_count": 51,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2e-05,
+      "final_rto_ms": 20.5,
+      "timeout_count": 7,
+      "backoff_count": 7
+    },
+    "protocol": {
+      "data_sent": 151,
+      "ack_sent": 144,
+      "data_received": 144,
+      "ack_received": 144,
+      "data_retransmissions": 51,
+      "timeout_retransmissions": 51,
+      "premature_retransmissions": 30,
+      "duplicate_data_received": 26,
+      "duplicate_acks_received": 44
+    },
+    "channel": {
+      "offered_datagrams": 151,
+      "dropped_datagrams": 7,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 144
+    },
+    "reverse_channel": {
+      "offered_datagrams": 144,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 144
+    },
+    "goodput_bytes_sec": 231980.115990058,
+    "retransmission_ratio": 0.33774834437086093
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m0.50_s303_t3",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 303,
+      "reverse_seed": 304,
+      "trial_id": 3
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.610339357,
+      "total_rtt_samples": 52,
+      "karn_rejected_count": 48,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 8.000000000000001e-06,
+      "final_rto_ms": 20.5,
+      "timeout_count": 8,
+      "backoff_count": 8
+    },
+    "protocol": {
+      "data_sent": 154,
+      "ack_sent": 142,
+      "data_received": 142,
+      "ack_received": 142,
+      "data_retransmissions": 54,
+      "timeout_retransmissions": 54,
+      "premature_retransmissions": 19,
+      "duplicate_data_received": 18,
+      "duplicate_acks_received": 42
+    },
+    "channel": {
+      "offered_datagrams": 154,
+      "dropped_datagrams": 12,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 142
+    },
+    "reverse_channel": {
+      "offered_datagrams": 142,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 142
+    },
+    "goodput_bytes_sec": 229380.5870362707,
+    "retransmission_ratio": 0.35064935064935066
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m0.50_s404_t4",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 404,
+      "reverse_seed": 405,
+      "trial_id": 4
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.6445,
+      "total_rtt_samples": 45,
+      "karn_rejected_count": 55,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 6.400000000000001e-05,
+      "final_rto_ms": 164.0,
+      "timeout_count": 8,
+      "backoff_count": 8
+    },
+    "protocol": {
+      "data_sent": 159,
+      "ack_sent": 153,
+      "data_received": 153,
+      "ack_received": 153,
+      "data_retransmissions": 59,
+      "timeout_retransmissions": 59,
+      "premature_retransmissions": 34,
+      "duplicate_data_received": 33,
+      "duplicate_acks_received": 53
+    },
+    "channel": {
+      "offered_datagrams": 159,
+      "dropped_datagrams": 6,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 153
+    },
+    "reverse_channel": {
+      "offered_datagrams": 153,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 153
+    },
+    "goodput_bytes_sec": 217222.65321955006,
+    "retransmission_ratio": 0.3710691823899371
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m0.50_s505_t5",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 505,
+      "reverse_seed": 506,
+      "trial_id": 5
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.541034539,
+      "total_rtt_samples": 54,
+      "karn_rejected_count": 46,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 4.000000000000001e-06,
+      "final_rto_ms": 20.5,
+      "timeout_count": 7,
+      "backoff_count": 7
+    },
+    "protocol": {
+      "data_sent": 146,
+      "ack_sent": 139,
+      "data_received": 139,
+      "ack_received": 139,
+      "data_retransmissions": 46,
+      "timeout_retransmissions": 46,
+      "premature_retransmissions": 30,
+      "duplicate_data_received": 29,
+      "duplicate_acks_received": 39
+    },
+    "channel": {
+      "offered_datagrams": 146,
+      "dropped_datagrams": 7,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 139
+    },
+    "reverse_channel": {
+      "offered_datagrams": 139,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 139
+    },
+    "goodput_bytes_sec": 258763.5167595095,
+    "retransmission_ratio": 0.3150684931506849
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m1.00_s101_t1",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 101,
+      "reverse_seed": 102,
+      "trial_id": 1
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.640688877,
+      "total_rtt_samples": 80,
+      "karn_rejected_count": 20,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 3,
+      "backoff_count": 3
+    },
+    "protocol": {
+      "data_sent": 124,
+      "ack_sent": 120,
+      "data_received": 120,
+      "ack_received": 120,
+      "data_retransmissions": 24,
+      "timeout_retransmissions": 24,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 20
+    },
+    "channel": {
+      "offered_datagrams": 124,
+      "dropped_datagrams": 4,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 120
+    },
+    "reverse_channel": {
+      "offered_datagrams": 120,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 120
+    },
+    "goodput_bytes_sec": 218514.79715949556,
+    "retransmission_ratio": 0.1935483870967742
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m1.00_s202_t2",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 202,
+      "reverse_seed": 203,
+      "trial_id": 2
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.707069077,
+      "total_rtt_samples": 66,
+      "karn_rejected_count": 34,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 82.0,
+      "timeout_count": 5,
+      "backoff_count": 5
+    },
+    "protocol": {
+      "data_sent": 134,
+      "ack_sent": 127,
+      "data_received": 127,
+      "ack_received": 127,
+      "data_retransmissions": 34,
+      "timeout_retransmissions": 34,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 27
+    },
+    "channel": {
+      "offered_datagrams": 134,
+      "dropped_datagrams": 7,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 127
+    },
+    "reverse_channel": {
+      "offered_datagrams": 127,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 127
+    },
+    "goodput_bytes_sec": 198000.45646742376,
+    "retransmission_ratio": 0.2537313432835821
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m1.00_s303_t3",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 303,
+      "reverse_seed": 304,
+      "trial_id": 3
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.759678713,
+      "total_rtt_samples": 63,
+      "karn_rejected_count": 37,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 82.0,
+      "timeout_count": 6,
+      "backoff_count": 6
+    },
+    "protocol": {
+      "data_sent": 143,
+      "ack_sent": 132,
+      "data_received": 132,
+      "ack_received": 132,
+      "data_retransmissions": 43,
+      "timeout_retransmissions": 43,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 32
+    },
+    "channel": {
+      "offered_datagrams": 143,
+      "dropped_datagrams": 11,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 132
+    },
+    "reverse_channel": {
+      "offered_datagrams": 132,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 132
+    },
+    "goodput_bytes_sec": 184288.43352360724,
+    "retransmission_ratio": 0.3006993006993007
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m1.00_s404_t4",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 404,
+      "reverse_seed": 405,
+      "trial_id": 4
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.623,
+      "total_rtt_samples": 90,
+      "karn_rejected_count": 10,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 164.0,
+      "timeout_count": 2,
+      "backoff_count": 2
+    },
+    "protocol": {
+      "data_sent": 110,
+      "ack_sent": 108,
+      "data_received": 108,
+      "ack_received": 108,
+      "data_retransmissions": 10,
+      "timeout_retransmissions": 10,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 8
+    },
+    "channel": {
+      "offered_datagrams": 110,
+      "dropped_datagrams": 2,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 108
+    },
+    "reverse_channel": {
+      "offered_datagrams": 108,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 108
+    },
+    "goodput_bytes_sec": 224719.1011235955,
+    "retransmission_ratio": 0.09090909090909091
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m1.00_s505_t5",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 505,
+      "reverse_seed": 506,
+      "trial_id": 5
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.625,
+      "total_rtt_samples": 78,
+      "karn_rejected_count": 22,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 3,
+      "backoff_count": 3
+    },
+    "protocol": {
+      "data_sent": 124,
+      "ack_sent": 119,
+      "data_received": 119,
+      "ack_received": 119,
+      "data_retransmissions": 24,
+      "timeout_retransmissions": 24,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 19
+    },
+    "channel": {
+      "offered_datagrams": 124,
+      "dropped_datagrams": 5,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 119
+    },
+    "reverse_channel": {
+      "offered_datagrams": 119,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 119
+    },
+    "goodput_bytes_sec": 224000.0,
+    "retransmission_ratio": 0.1935483870967742
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m3.00_s101_t1",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 101,
+      "reverse_seed": 102,
+      "trial_id": 1
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 1.002066631,
+      "total_rtt_samples": 80,
+      "karn_rejected_count": 20,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 3,
+      "backoff_count": 3
+    },
+    "protocol": {
+      "data_sent": 124,
+      "ack_sent": 120,
+      "data_received": 120,
+      "ack_received": 120,
+      "data_retransmissions": 24,
+      "timeout_retransmissions": 24,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 20
+    },
+    "channel": {
+      "offered_datagrams": 124,
+      "dropped_datagrams": 4,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 120
+    },
+    "reverse_channel": {
+      "offered_datagrams": 120,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 120
+    },
+    "goodput_bytes_sec": 139711.26836175428,
+    "retransmission_ratio": 0.1935483870967742
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m3.00_s202_t2",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 202,
+      "reverse_seed": 203,
+      "trial_id": 2
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 1.281207231,
+      "total_rtt_samples": 66,
+      "karn_rejected_count": 34,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 246.0,
+      "timeout_count": 5,
+      "backoff_count": 5
+    },
+    "protocol": {
+      "data_sent": 134,
+      "ack_sent": 127,
+      "data_received": 127,
+      "ack_received": 127,
+      "data_retransmissions": 34,
+      "timeout_retransmissions": 34,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 27
+    },
+    "channel": {
+      "offered_datagrams": 134,
+      "dropped_datagrams": 7,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 127
+    },
+    "reverse_channel": {
+      "offered_datagrams": 127,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 127
+    },
+    "goodput_bytes_sec": 109271.94025491728,
+    "retransmission_ratio": 0.2537313432835821
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m3.00_s303_t3",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 303,
+      "reverse_seed": 304,
+      "trial_id": 3
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 1.5990361389999999,
+      "total_rtt_samples": 63,
+      "karn_rejected_count": 37,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 246.0,
+      "timeout_count": 6,
+      "backoff_count": 6
+    },
+    "protocol": {
+      "data_sent": 143,
+      "ack_sent": 132,
+      "data_received": 132,
+      "ack_received": 132,
+      "data_retransmissions": 43,
+      "timeout_retransmissions": 43,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 32
+    },
+    "channel": {
+      "offered_datagrams": 143,
+      "dropped_datagrams": 11,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 132
+    },
+    "reverse_channel": {
+      "offered_datagrams": 132,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 132
+    },
+    "goodput_bytes_sec": 87552.74292146564,
+    "retransmission_ratio": 0.3006993006993007
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m3.00_s404_t4",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 404,
+      "reverse_seed": 405,
+      "trial_id": 4
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.869,
+      "total_rtt_samples": 90,
+      "karn_rejected_count": 10,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 492.0,
+      "timeout_count": 2,
+      "backoff_count": 2
+    },
+    "protocol": {
+      "data_sent": 110,
+      "ack_sent": 108,
+      "data_received": 108,
+      "ack_received": 108,
+      "data_retransmissions": 10,
+      "timeout_retransmissions": 10,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 8
+    },
+    "channel": {
+      "offered_datagrams": 110,
+      "dropped_datagrams": 2,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 108
+    },
+    "reverse_channel": {
+      "offered_datagrams": 108,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 108
+    },
+    "goodput_bytes_sec": 161104.71806674337,
+    "retransmission_ratio": 0.09090909090909091
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_GoBackN_m3.00_s505_t5",
+      "protocol": "GoBackN",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 505,
+      "reverse_seed": 506,
+      "trial_id": 5
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 1.035,
+      "total_rtt_samples": 78,
+      "karn_rejected_count": 22,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 3,
+      "backoff_count": 3
+    },
+    "protocol": {
+      "data_sent": 124,
+      "ack_sent": 119,
+      "data_received": 119,
+      "ack_received": 119,
+      "data_retransmissions": 24,
+      "timeout_retransmissions": 24,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 19
+    },
+    "channel": {
+      "offered_datagrams": 124,
+      "dropped_datagrams": 5,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 119
+    },
+    "reverse_channel": {
+      "offered_datagrams": 119,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 119
+    },
+    "goodput_bytes_sec": 135265.7004830918,
+    "retransmission_ratio": 0.1935483870967742
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m0.50_s101_t1",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 101,
+      "reverse_seed": 102,
+      "trial_id": 1
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 6.992714749,
+      "total_rtt_samples": 55,
+      "karn_rejected_count": 45,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 3e-06,
+      "final_rto_ms": 656.0,
+      "timeout_count": 46,
+      "backoff_count": 46
+    },
+    "protocol": {
+      "data_sent": 146,
+      "ack_sent": 141,
+      "data_received": 141,
+      "ack_received": 141,
+      "data_retransmissions": 46,
+      "timeout_retransmissions": 46,
+      "premature_retransmissions": 42,
+      "duplicate_data_received": 41,
+      "duplicate_acks_received": 41
+    },
+    "channel": {
+      "offered_datagrams": 146,
+      "dropped_datagrams": 5,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 141
+    },
+    "reverse_channel": {
+      "offered_datagrams": 141,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 141
+    },
+    "goodput_bytes_sec": 20020.836688643823,
+    "retransmission_ratio": 0.3150684931506849
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m0.50_s202_t2",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 202,
+      "reverse_seed": 203,
+      "trial_id": 2
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.6845,
+      "total_rtt_samples": 56,
+      "karn_rejected_count": 44,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 20.5,
+      "timeout_count": 44,
+      "backoff_count": 44
+    },
+    "protocol": {
+      "data_sent": 144,
+      "ack_sent": 137,
+      "data_received": 137,
+      "ack_received": 137,
+      "data_retransmissions": 44,
+      "timeout_retransmissions": 44,
+      "premature_retransmissions": 41,
+      "duplicate_data_received": 37,
+      "duplicate_acks_received": 37
+    },
+    "channel": {
+      "offered_datagrams": 144,
+      "dropped_datagrams": 7,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 137
+    },
+    "reverse_channel": {
+      "offered_datagrams": 137,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 137
+    },
+    "goodput_bytes_sec": 204528.85317750182,
+    "retransmission_ratio": 0.3055555555555556
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m0.50_s303_t3",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 303,
+      "reverse_seed": 304,
+      "trial_id": 3
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 11.637339357,
+      "total_rtt_samples": 54,
+      "karn_rejected_count": 46,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 4.000000000000001e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 46,
+      "backoff_count": 46
+    },
+    "protocol": {
+      "data_sent": 146,
+      "ack_sent": 134,
+      "data_received": 134,
+      "ack_received": 134,
+      "data_retransmissions": 46,
+      "timeout_retransmissions": 46,
+      "premature_retransmissions": 36,
+      "duplicate_data_received": 34,
+      "duplicate_acks_received": 32
+    },
+    "channel": {
+      "offered_datagrams": 146,
+      "dropped_datagrams": 12,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 134
+    },
+    "reverse_channel": {
+      "offered_datagrams": 134,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 134
+    },
+    "goodput_bytes_sec": 12030.241252334738,
+    "retransmission_ratio": 0.3150684931506849
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m0.50_s404_t4",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 404,
+      "reverse_seed": 405,
+      "trial_id": 4
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 5.7695,
+      "total_rtt_samples": 56,
+      "karn_rejected_count": 44,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 44,
+      "backoff_count": 44
+    },
+    "protocol": {
+      "data_sent": 144,
+      "ack_sent": 140,
+      "data_received": 140,
+      "ack_received": 140,
+      "data_retransmissions": 44,
+      "timeout_retransmissions": 44,
+      "premature_retransmissions": 41,
+      "duplicate_data_received": 40,
+      "duplicate_acks_received": 38
+    },
+    "channel": {
+      "offered_datagrams": 144,
+      "dropped_datagrams": 4,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 140
+    },
+    "reverse_channel": {
+      "offered_datagrams": 140,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 140
+    },
+    "goodput_bytes_sec": 24265.534275067163,
+    "retransmission_ratio": 0.3055555555555556
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m0.50_s505_t5",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 505,
+      "reverse_seed": 506,
+      "trial_id": 5
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 0.5,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 6.056534539,
+      "total_rtt_samples": 52,
+      "karn_rejected_count": 48,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 8.000000000000001e-06,
+      "final_rto_ms": 82.0,
+      "timeout_count": 48,
+      "backoff_count": 48
+    },
+    "protocol": {
+      "data_sent": 148,
+      "ack_sent": 141,
+      "data_received": 141,
+      "ack_received": 141,
+      "data_retransmissions": 48,
+      "timeout_retransmissions": 48,
+      "premature_retransmissions": 42,
+      "duplicate_data_received": 41,
+      "duplicate_acks_received": 37
+    },
+    "channel": {
+      "offered_datagrams": 148,
+      "dropped_datagrams": 7,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 141
+    },
+    "reverse_channel": {
+      "offered_datagrams": 141,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 141
+    },
+    "goodput_bytes_sec": 23115.52903702511,
+    "retransmission_ratio": 0.32432432432432434
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m1.00_s101_t1",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 101,
+      "reverse_seed": 102,
+      "trial_id": 1
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.592678713,
+      "total_rtt_samples": 96,
+      "karn_rejected_count": 4,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 4,
+      "backoff_count": 4
+    },
+    "protocol": {
+      "data_sent": 104,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 4,
+      "timeout_retransmissions": 4,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 104,
+      "dropped_datagrams": 4,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 236215.67120464475,
+    "retransmission_ratio": 0.038461538461538464
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m1.00_s202_t2",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 202,
+      "reverse_seed": 203,
+      "trial_id": 2
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.583069077,
+      "total_rtt_samples": 97,
+      "karn_rejected_count": 3,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 3,
+      "backoff_count": 3
+    },
+    "protocol": {
+      "data_sent": 103,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 3,
+      "timeout_retransmissions": 3,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 103,
+      "dropped_datagrams": 3,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 240108.77188055712,
+    "retransmission_ratio": 0.02912621359223301
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m1.00_s303_t3",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 303,
+      "reverse_seed": 304,
+      "trial_id": 3
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 1.208678713,
+      "total_rtt_samples": 90,
+      "karn_rejected_count": 10,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 82.0,
+      "timeout_count": 10,
+      "backoff_count": 10
+    },
+    "protocol": {
+      "data_sent": 110,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 10,
+      "timeout_retransmissions": 10,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 110,
+      "dropped_datagrams": 10,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 115828.96140572635,
+    "retransmission_ratio": 0.09090909090909091
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m1.00_s404_t4",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 404,
+      "reverse_seed": 405,
+      "trial_id": 4
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.541,
+      "total_rtt_samples": 99,
+      "karn_rejected_count": 1,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 1,
+      "backoff_count": 1
+    },
+    "protocol": {
+      "data_sent": 101,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 1,
+      "timeout_retransmissions": 1,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 101,
+      "dropped_datagrams": 1,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 258780.0369685767,
+    "retransmission_ratio": 0.009900990099009901
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m1.00_s505_t5",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 505,
+      "reverse_seed": 506,
+      "trial_id": 5
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 1.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.583,
+      "total_rtt_samples": 95,
+      "karn_rejected_count": 5,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 41.0,
+      "timeout_count": 5,
+      "backoff_count": 5
+    },
+    "protocol": {
+      "data_sent": 105,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 5,
+      "timeout_retransmissions": 5,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 105,
+      "dropped_datagrams": 5,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 240137.22126929674,
+    "retransmission_ratio": 0.047619047619047616
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m3.00_s101_t1",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 101,
+      "reverse_seed": 102,
+      "trial_id": 1
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 1.227036139,
+      "total_rtt_samples": 96,
+      "karn_rejected_count": 4,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 4,
+      "backoff_count": 4
+    },
+    "protocol": {
+      "data_sent": 104,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 4,
+      "timeout_retransmissions": 4,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 104,
+      "dropped_datagrams": 4,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 114096.06901561683,
+    "retransmission_ratio": 0.038461538461538464
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m3.00_s202_t2",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 202,
+      "reverse_seed": 203,
+      "trial_id": 2
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.829207231,
+      "total_rtt_samples": 97,
+      "karn_rejected_count": 3,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 3,
+      "backoff_count": 3
+    },
+    "protocol": {
+      "data_sent": 103,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 3,
+      "timeout_retransmissions": 3,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 103,
+      "dropped_datagrams": 3,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 168835.96134486675,
+    "retransmission_ratio": 0.02912621359223301
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m3.00_s303_t3",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 303,
+      "reverse_seed": 304,
+      "trial_id": 3
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 3.770036139,
+      "total_rtt_samples": 90,
+      "karn_rejected_count": 10,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 246.0,
+      "timeout_count": 10,
+      "backoff_count": 10
+    },
+    "protocol": {
+      "data_sent": 110,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 10,
+      "timeout_retransmissions": 10,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 110,
+      "dropped_datagrams": 10,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 37134.9225413884,
+    "retransmission_ratio": 0.09090909090909091
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m3.00_s404_t4",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 404,
+      "reverse_seed": 405,
+      "trial_id": 4
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.623,
+      "total_rtt_samples": 99,
+      "karn_rejected_count": 1,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 1,
+      "backoff_count": 1
+    },
+    "protocol": {
+      "data_sent": 101,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 1,
+      "timeout_retransmissions": 1,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 101,
+      "dropped_datagrams": 1,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 224719.1011235955,
+    "retransmission_ratio": 0.009900990099009901
+  },
+  {
+    "meta": {
+      "experiment_id": "rto_sensitivity_SelectiveRepeat_m3.00_s505_t5",
+      "protocol": "SelectiveRepeat",
+      "window_size": 8,
+      "chunk_size": 1400,
+      "segment_count": 100,
+      "seed": 505,
+      "reverse_seed": 506,
+      "trial_id": 5
+    },
+    "forward_config": {
+      "configured_loss_rate": 0.05,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "reverse_config": {
+      "configured_loss_rate": 0.0,
+      "configured_reorder_rate": 0.0,
+      "configured_duplicate_rate": 0.0,
+      "configured_corrupt_rate": 0.0,
+      "base_delay_ms": 20,
+      "jitter_ms": 0,
+      "reorder_extra_ms": 50
+    },
+    "rto_config": {
+      "rto_multiplier": 3.0,
+      "initial_rto_ms": 1000.0,
+      "min_rto_ms": 10.0,
+      "max_rto_ms": 60000.0,
+      "alpha": 0.125,
+      "beta": 0.25,
+      "k": 4.0
+    },
+    "app": {
+      "source_bytes": 140000,
+      "delivered_unique_bytes": 140000,
+      "transfer_status": "SUCCESS",
+      "sha256_match": true,
+      "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+      "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+    },
+    "timing": {
+      "duration_secs": 0.912,
+      "total_rtt_samples": 95,
+      "karn_rejected_count": 5,
+      "min_rtt_ms": 40.0,
+      "max_rtt_ms": 40.0,
+      "mean_rtt_ms": 40.0,
+      "final_srtt_ms": 40.0,
+      "final_rttvar_ms": 2.0000000000000003e-06,
+      "final_rto_ms": 123.0,
+      "timeout_count": 5,
+      "backoff_count": 5
+    },
+    "protocol": {
+      "data_sent": 105,
+      "ack_sent": 100,
+      "data_received": 100,
+      "ack_received": 100,
+      "data_retransmissions": 5,
+      "timeout_retransmissions": 5,
+      "premature_retransmissions": 0,
+      "duplicate_data_received": 0,
+      "duplicate_acks_received": 0
+    },
+    "channel": {
+      "offered_datagrams": 105,
+      "dropped_datagrams": 5,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "reverse_channel": {
+      "offered_datagrams": 100,
+      "dropped_datagrams": 0,
+      "duplicated_datagrams": 0,
+      "corrupted_datagrams": 0,
+      "reordered_datagrams": 0,
+      "scheduled_deliveries": 100
+    },
+    "goodput_bytes_sec": 153508.77192982455,
+    "retransmission_ratio": 0.047619047619047616
+  }
+]

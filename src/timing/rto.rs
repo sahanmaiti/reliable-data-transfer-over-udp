@@ -103,6 +103,14 @@ impl RtoEstimator {
         self.current_rto
     }
 
+    /// Configuration this estimator was built with.
+    ///
+    /// Result records read alpha, beta, k, the multiplier, and the RTO bounds
+    /// from here so the metrics layer does not keep a second copy of the constants.
+    pub fn config(&self) -> &RtoConfig {
+        &self.config
+    }
+
     /// Returns the current Smoothed RTT (SRTT), if at least one sample was measured.
     pub fn srtt(&self) -> Option<Duration> {
         self.srtt

@@ -131,6 +131,37 @@ fn test_gobackn_discards_out_of_order_packets() {
 }
 
 #[test]
+fn test_gobackn_out_of_order_before_first_delivery_does_not_advance_send_base() {
+    let mut sender = GoBackNSender::new(4);
+    let mut receiver = GoBackNReceiver::new();
+
+    let pkt0 = sender.send_chunk(b"0".to_vec()).unwrap();
+    let pkt1 = sender.send_chunk(b"1".to_vec()).unwrap();
+    assert_eq!(sender.send_base(), 0);
+
+    // Packet 1 arrives while sequence 0 has never been received.
+    let ack = receiver.handle_packet(&pkt1);
+    assert!(
+        ack.is_none(),
+        "receiver must not ACK seq 0 before that packet arrives"
+    );
+    assert_eq!(receiver.expected_seq(), 0);
+    assert!(receiver.delivered_chunks().is_empty());
+    assert_eq!(receiver.discarded_out_of_order, 1);
+    assert_eq!(sender.send_base(), 0);
+    assert_eq!(sender.in_flight_count(), 2);
+
+    // The delayed packet 0 is still the next in-order delivery.
+    let ack0 = receiver
+        .handle_packet(&pkt0)
+        .expect("in-order seq 0 must be acknowledged");
+    assert_eq!(ack0.seq_num, 0);
+    assert!(sender.handle_ack(&ack0));
+    assert_eq!(sender.send_base(), 1);
+    assert_eq!(receiver.delivered_chunks(), &[b"0".to_vec()]);
+}
+
+#[test]
 fn test_selective_repeat_buffers_out_of_order_packets() {
     let window_size = 4;
     let mut sender = SelectiveRepeatSender::new(window_size);

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="520" viewBox="0 0 860 520">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="430.0" y="28" text-anchor="middle" font-family="sans-serif" font-size="16">Mean goodput vs loss</text>
+<line x1="100" y1="440" x2="820" y2="440" stroke="#222"/>
+<line x1="100" y1="70" x2="100" y2="440" stroke="#222"/>
+<text x="460.0" y="504" text-anchor="middle" font-family="sans-serif" font-size="13">Configured loss rate</text>
+<text x="18" y="255.0" text-anchor="middle" font-family="sans-serif" font-size="13" transform="rotate(-90 18 255.0)">Mean goodput (bytes/s)</text>
+<text x="100.0" y="462" text-anchor="middle" font-family="sans-serif" font-size="11">0.00</text>
+<text x="244.0" y="462" text-anchor="middle" font-family="sans-serif" font-size="11">0.05</text>
+<text x="388.0" y="462" text-anchor="middle" font-family="sans-serif" font-size="11">0.10</text>
+<text x="532.0" y="462" text-anchor="middle" font-family="sans-serif" font-size="11">0.15</text>
+<text x="676.0" y="462" text-anchor="middle" font-family="sans-serif" font-size="11">0.20</text>
+<text x="820.0" y="462" text-anchor="middle" font-family="sans-serif" font-size="11">0.25</text>
+<line x1="100.0" y1="373.9" x2="100.0" y2="373.9" stroke="#c0392b" stroke-width="1.5"/>
+<circle cx="100.0" cy="373.9" r="4" fill="#c0392b"/>
+<line x1="244.0" y1="389.1" x2="244.0" y2="374.8" stroke="#c0392b" stroke-width="1.5"/>
+<circle cx="244.0" cy="382.0" r="4" fill="#c0392b"/>
+<line x1="388.0" y1="396.4" x2="388.0" y2="387.8" stroke="#c0392b" stroke-width="1.5"/>
+<circle cx="388.0" cy="392.1" r="4" fill="#c0392b"/>
+<line x1="532.0" y1="401.9" x2="532.0" y2="393.0" stroke="#c0392b" stroke-width="1.5"/>
+<circle cx="532.0" cy="397.5" r="4" fill="#c0392b"/>
+<line x1="676.0" y1="405.5" x2="676.0" y2="397.9" stroke="#c0392b" stroke-width="1.5"/>
+<circle cx="676.0" cy="401.7" r="4" fill="#c0392b"/>
+<line x1="820.0" y1="408.8" x2="820.0" y2="400.2" stroke="#c0392b" stroke-width="1.5"/>
+<circle cx="820.0" cy="404.5" r="4" fill="#c0392b"/>
+<polyline points="100.0,373.9 244.0,382.0 388.0,392.1 532.0,397.5 676.0,401.7 820.0,404.5" fill="none" stroke="#c0392b" stroke-width="2"/>
+<rect x="100" y="48" width="14" height="14" fill="#c0392b"/>
+<text x="120" y="60" font-family="sans-serif" font-size="12">StopAndWait</text>
+<line x1="100.0" y1="95.5" x2="100.0" y2="95.5" stroke="#d68910" stroke-width="1.5"/>
+<circle cx="100.0" cy="95.5" r="4" fill="#d68910"/>
+<line x1="244.0" y1="344.1" x2="244.0" y2="268.3" stroke="#d68910" stroke-width="1.5"/>
+<circle cx="244.0" cy="306.2" r="4" fill="#d68910"/>
+<line x1="388.0" y1="413.7" x2="388.0" y2="390.6" stroke="#d68910" stroke-width="1.5"/>
+<circle cx="388.0" cy="402.1" r="4" fill="#d68910"/>
+<line x1="532.0" y1="413.1" x2="532.0" y2="411.9" stroke="#d68910" stroke-width="1.5"/>
+<circle cx="532.0" cy="412.5" r="4" fill="#d68910"/>
+<line x1="676.0" y1="413.8" x2="676.0" y2="412.5" stroke="#d68910" stroke-width="1.5"/>
+<circle cx="676.0" cy="413.1" r="4" fill="#d68910"/>
+<line x1="820.0" y1="413.9" x2="820.0" y2="413.3" stroke="#d68910" stroke-width="1.5"/>
+<circle cx="820.0" cy="413.6" r="4" fill="#d68910"/>
+<polyline points="100.0,95.5 244.0,306.2 388.0,402.1 532.0,412.5 676.0,413.1 820.0,413.6" fill="none" stroke="#d68910" stroke-width="2"/>
+<rect x="290" y="48" width="14" height="14" fill="#d68910"/>
+<text x="310" y="60" font-family="sans-serif" font-size="12">GoBackN</text>
+<line x1="100.0" y1="95.5" x2="100.0" y2="95.5" stroke="#1e8449" stroke-width="1.5"/>
+<circle cx="100.0" cy="95.5" r="4" fill="#1e8449"/>
+<line x1="244.0" y1="378.7" x2="244.0" y2="196.6" stroke="#1e8449" stroke-width="1.5"/>
+<circle cx="244.0" cy="287.6" r="4" fill="#1e8449"/>
+<line x1="388.0" y1="392.1" x2="388.0" y2="375.1" stroke="#1e8449" stroke-width="1.5"/>
+<circle cx="388.0" cy="383.6" r="4" fill="#1e8449"/>
+<line x1="532.0" y1="408.4" x2="532.0" y2="385.1" stroke="#1e8449" stroke-width="1.5"/>
+<circle cx="532.0" cy="396.7" r="4" fill="#1e8449"/>
+<line x1="676.0" y1="408.8" x2="676.0" y2="398.5" stroke="#1e8449" stroke-width="1.5"/>
+<circle cx="676.0" cy="403.7" r="4" fill="#1e8449"/>
+<line x1="820.0" y1="414.5" x2="820.0" y2="404.0" stroke="#1e8449" stroke-width="1.5"/>
+<circle cx="820.0" cy="409.2" r="4" fill="#1e8449"/>
+<polyline points="100.0,95.5 244.0,287.6 388.0,383.6 532.0,396.7 676.0,403.7 820.0,409.2" fill="none" stroke="#1e8449" stroke-width="2"/>
+<rect x="480" y="48" width="14" height="14" fill="#1e8449"/>
+<text x="500" y="60" font-family="sans-serif" font-size="12">SelectiveRepeat</text>
+</svg>
