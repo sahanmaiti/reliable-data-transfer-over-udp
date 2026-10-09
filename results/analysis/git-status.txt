@@ -1,0 +1,25 @@
+ M experiments/python/plot_results.py
+ M experiments/python/run_experiments.py
+ M results/raw/README.md
+ M results/raw/experiments_raw.csv
+ M results/raw/experiments_raw.json
+ M src/app/file_io.rs
+ M src/app/integrity.rs
+ M src/app/mod.rs
+ M src/app/transfer.rs
+ M src/arq/gbn.rs
+ M src/main.rs
+ M src/metrics/collector.rs
+ M src/metrics/mod.rs
+ M src/timing/rto.rs
+ M tests/test_arq.rs
+ M tests/test_metrics.rs
+?? experiments/python/README.md
+?? experiments/python/test_plot_results.py
+?? experiments/python/test_run_experiments.py
+?? results/analysis/
+?? results/raw/archive/
+?? results/raw/execution_log.json
+?? results/raw/trials/
+?? tests/test_cli.rs
+?? tests/test_transfer.rs

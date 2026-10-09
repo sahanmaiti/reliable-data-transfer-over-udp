@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "experiment_id": "primary_reordering_GoBackN_r0.15_s404_t4",
+    "protocol": "GoBackN",
+    "window_size": 8,
+    "chunk_size": 1400,
+    "segment_count": 100,
+    "seed": 404,
+    "reverse_seed": 405,
+    "trial_id": 4
+  },
+  "forward_config": {
+    "configured_loss_rate": 0.0,
+    "configured_reorder_rate": 0.15,
+    "configured_duplicate_rate": 0.0,
+    "configured_corrupt_rate": 0.0,
+    "base_delay_ms": 20,
+    "jitter_ms": 0,
+    "reorder_extra_ms": 50
+  },
+  "reverse_config": {
+    "configured_loss_rate": 0.0,
+    "configured_reorder_rate": 0.0,
+    "configured_duplicate_rate": 0.0,
+    "configured_corrupt_rate": 0.0,
+    "base_delay_ms": 20,
+    "jitter_ms": 0,
+    "reorder_extra_ms": 50
+  },
+  "rto_config": {
+    "rto_multiplier": 1.0,
+    "initial_rto_ms": 1000.0,
+    "min_rto_ms": 200.0,
+    "max_rto_ms": 60000.0,
+    "alpha": 0.125,
+    "beta": 0.25,
+    "k": 4.0
+  },
+  "app": {
+    "source_bytes": 140000,
+    "delivered_unique_bytes": 140000,
+    "transfer_status": "SUCCESS",
+    "sha256_match": true,
+    "source_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf",
+    "delivered_sha256": "8e6c7049a65aeff8211b2bbd78db47683a1b86f75565ad3362fb6e53a0a4cbbf"
+  },
+  "timing": {
+    "duration_secs": 11.5,
+    "total_rtt_samples": 32,
+    "karn_rejected_count": 68,
+    "min_rtt_ms": 40.0,
+    "max_rtt_ms": 90.0,
+    "mean_rtt_ms": 49.375,
+    "final_srtt_ms": 55.741324,
+    "final_rttvar_ms": 23.863213000000002,
+    "final_rto_ms": 6400.0,
+    "timeout_count": 12,
+    "backoff_count": 12
+  },
+  "protocol": {
+    "data_sent": 193,
+    "ack_sent": 193,
+    "data_received": 193,
+    "ack_received": 193,
+    "data_retransmissions": 93,
+    "timeout_retransmissions": 93,
+    "premature_retransmissions": 0,
+    "duplicate_data_received": 0,
+    "duplicate_acks_received": 93
+  },
+  "channel": {
+    "offered_datagrams": 193,
+    "dropped_datagrams": 0,
+    "duplicated_datagrams": 0,
+    "corrupted_datagrams": 0,
+    "reordered_datagrams": 27,
+    "scheduled_deliveries": 193
+  },
+  "reverse_channel": {
+    "offered_datagrams": 193,
+    "dropped_datagrams": 0,
+    "duplicated_datagrams": 0,
+    "corrupted_datagrams": 0,
+    "reordered_datagrams": 0,
+    "scheduled_deliveries": 193
+  },
+  "goodput_bytes_sec": 12173.91304347826,
+  "retransmission_ratio": 0.48186528497409326
+}
