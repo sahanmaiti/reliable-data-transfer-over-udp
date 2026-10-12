@@ -2,13 +2,13 @@
 // Author: Soumyadeb Mukherjee
 // Component: Protocol & ARQ - Module Root & Universal Architecture
 
-pub mod sw;
 pub mod gbn;
 pub mod sr;
+pub mod sw;
 
-pub use sw::{StopAndWaitSender, StopAndWaitReceiver};
-pub use gbn::{GoBackNSender, GoBackNReceiver};
-pub use sr::{SelectiveRepeatSender, SelectiveRepeatReceiver};
+pub use gbn::{GoBackNReceiver, GoBackNSender};
+pub use sr::{SelectiveRepeatReceiver, SelectiveRepeatSender};
+pub use sw::{StopAndWaitReceiver, StopAndWaitSender};
 
 /// The protocol types selectable at runtime.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -26,7 +26,10 @@ impl std::str::FromStr for ProtocolType {
             "stopandwait" | "sw" => Ok(ProtocolType::StopAndWait),
             "gobackn" | "gbn" => Ok(ProtocolType::GoBackN),
             "selectiverepeat" | "sr" => Ok(ProtocolType::SelectiveRepeat),
-            other => Err(format!("unknown ARQ protocol: '{}'. Valid options: StopAndWait, GoBackN, SelectiveRepeat", other)),
+            other => Err(format!(
+                "unknown ARQ protocol: '{}'. Valid options: StopAndWait, GoBackN, SelectiveRepeat",
+                other
+            )),
         }
     }
 }

@@ -250,13 +250,19 @@ mod tests {
 
     #[test]
     fn loss_one_drops_everything() {
-        let config = ChannelConfig { loss: 1.0, ..clean_config(1) };
+        let config = ChannelConfig {
+            loss: 1.0,
+            ..clean_config(1)
+        };
         assert!(run(config, 1000).iter().all(|out| out.is_empty()));
     }
 
     #[test]
     fn loss_rate_close_to_configured() {
-        let config = ChannelConfig { loss: 0.3, ..clean_config(42) };
+        let config = ChannelConfig {
+            loss: 0.3,
+            ..clean_config(42)
+        };
         let mut ch = Channel::new(config);
         for i in 0..100_000u32 {
             ch.process(&[i as u8; 10]);
@@ -267,24 +273,34 @@ mod tests {
 
     #[test]
     fn duplicate_rate_close_to_configured() {
-        let config = ChannelConfig { duplicate: 0.2, ..clean_config(42) };
+        let config = ChannelConfig {
+            duplicate: 0.2,
+            ..clean_config(42)
+        };
         let mut ch = Channel::new(config);
         for i in 0..100_000u32 {
             ch.process(&[i as u8; 10]);
         }
         let rate = ch.stats.duplicated as f64 / ch.stats.packets_seen as f64;
-        assert!((rate - 0.2).abs() < 0.01, "observed duplicate rate {}", rate);
+        assert!(
+            (rate - 0.2).abs() < 0.01,
+            "observed duplicate rate {}",
+            rate
+        );
     }
 
     #[test]
     fn corruption_changes_bytes_but_not_length() {
-        let config = ChannelConfig { corrupt: 1.0, ..clean_config(5) };
+        let config = ChannelConfig {
+            corrupt: 1.0,
+            ..clean_config(5)
+        };
         let results = run(config, 1000);
         for (i, out) in results.iter().enumerate() {
             let original = vec![i as u8; 10];
-            assert_eq!(out[0].1.len(), original.len()); // same length
-            assert_ne!(out[0].1, original); // different bytes
-            // exactly one bit differs
+            // Same length, different bytes, exactly one bit flipped.
+            assert_eq!(out[0].1.len(), original.len());
+            assert_ne!(out[0].1, original);
             let flipped: u32 = out[0]
                 .1
                 .iter()
@@ -307,7 +323,10 @@ mod tests {
     #[test]
     fn reorder_rate_close_to_configured() {
         // 25% is the top of the proposal's sweep.
-        let config = ChannelConfig { reorder: 0.25, ..clean_config(42) };
+        let config = ChannelConfig {
+            reorder: 0.25,
+            ..clean_config(42)
+        };
         let mut ch = Channel::new(config);
         for i in 0..100_000u32 {
             ch.process(&[i as u8; 10]);
@@ -318,10 +337,13 @@ mod tests {
 
     #[test]
     fn delay_stays_within_base_plus_jitter() {
-        let config = ChannelConfig { jitter_ms: 10, ..clean_config(9) };
+        let config = ChannelConfig {
+            jitter_ms: 10,
+            ..clean_config(9)
+        };
         for out in run(config, 5000) {
             let delay = out[0].0;
-            assert!(delay >= 50 && delay <= 60, "delay {}", delay);
+            assert!((50..=60).contains(&delay), "delay {}", delay);
         }
     }
 

@@ -12,7 +12,11 @@ fn test_stop_and_wait_clean_transfer() {
     let mut sender = StopAndWaitSender::new(5);
     let mut receiver = StopAndWaitReceiver::new();
 
-    let chunks = vec![b"chunk_0".to_vec(), b"chunk_1".to_vec(), b"chunk_2".to_vec()];
+    let chunks = vec![
+        b"chunk_0".to_vec(),
+        b"chunk_1".to_vec(),
+        b"chunk_2".to_vec(),
+    ];
 
     for chunk in chunks.clone() {
         assert!(sender.can_send());
@@ -20,7 +24,9 @@ fn test_stop_and_wait_clean_transfer() {
         assert!(!sender.can_send()); // S&W window full
 
         // Receiver receives DATA and returns ACK
-        let ack_pkt = receiver.handle_packet(&data_pkt).expect("Receiver must ACK");
+        let ack_pkt = receiver
+            .handle_packet(&data_pkt)
+            .expect("Receiver must ACK");
         let acked = sender.handle_ack(&ack_pkt);
         assert!(acked);
     }
@@ -60,7 +66,9 @@ fn test_stop_and_wait_duplicate_handling_on_lost_ack() {
     let retry_pkt = sender.handle_timeout().unwrap();
 
     // Receiver receives duplicate DATA
-    let dup_ack = receiver.handle_packet(&retry_pkt).expect("Must re-ACK duplicate");
+    let dup_ack = receiver
+        .handle_packet(&retry_pkt)
+        .expect("Must re-ACK duplicate");
     assert_eq!(receiver.duplicates_count, 1);
     // Crucial invariant: duplicate packet must NOT be delivered twice to application!
     assert_eq!(receiver.delivered_chunks().len(), 1);
@@ -108,7 +116,8 @@ fn test_gobackn_discards_out_of_order_packets() {
     let mut receiver = GoBackNReceiver::new();
 
     let pkt0 = sender.send_chunk(b"0".to_vec()).unwrap();
-    let pkt1 = sender.send_chunk(b"1".to_vec()).unwrap();
+    // Sequence 1 is transmitted into the window but never delivered.
+    sender.send_chunk(b"1".to_vec()).unwrap();
     let pkt2 = sender.send_chunk(b"2".to_vec()).unwrap();
 
     // Receiver gets pkt0

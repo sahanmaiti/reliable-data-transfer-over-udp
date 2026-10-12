@@ -13,8 +13,8 @@ use reliable_udp::arq::{
 };
 use reliable_udp::channel::{Channel, ChannelConfig};
 use reliable_udp::metrics::{
-    ApplicationMetrics, ChannelMetrics, ExperimentMeta, ExperimentRecord, ForwardChannelConfig,
-    ProtocolMetrics, ReverseChannelConfig, RtoParameters, TimingMetrics,
+    ApplicationMetrics, ChannelMetrics, ExperimentMeasurements, ExperimentMeta, ExperimentRecord,
+    ForwardChannelConfig, ProtocolMetrics, ReverseChannelConfig, RtoParameters, TimingMetrics,
 };
 use reliable_udp::packet::{Packet, MAX_PAYLOAD_SIZE};
 use reliable_udp::timing::{RtoConfig, RtoEstimator};
@@ -346,34 +346,36 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     beta: 0.0,
                     k: 0.0,
                 },
-                ApplicationMetrics {
-                    source_bytes: file_bytes,
-                    delivered_unique_bytes: reassembler.total_bytes_accepted as u64,
-                    transfer_status: if is_match {
-                        "SUCCESS".to_string()
-                    } else {
-                        "INTEGRITY_FAIL".to_string()
+                ExperimentMeasurements {
+                    app: ApplicationMetrics {
+                        source_bytes: file_bytes,
+                        delivered_unique_bytes: reassembler.total_bytes_accepted as u64,
+                        transfer_status: if is_match {
+                            "SUCCESS".to_string()
+                        } else {
+                            "INTEGRITY_FAIL".to_string()
+                        },
+                        sha256_match: is_match,
+                        source_sha256: source_sha,
+                        delivered_sha256: reconstructed_sha,
                     },
-                    sha256_match: is_match,
-                    source_sha256: source_sha,
-                    delivered_sha256: reconstructed_sha,
+                    timing: TimingMetrics {
+                        duration_secs: elapsed,
+                        total_rtt_samples: 0,
+                        karn_rejected_count: 0,
+                        min_rtt_ms: 0.0,
+                        max_rtt_ms: 0.0,
+                        mean_rtt_ms: 0.0,
+                        final_srtt_ms: 0.0,
+                        final_rttvar_ms: 0.0,
+                        final_rto_ms: 0.0,
+                        timeout_count: 0,
+                        backoff_count: 0,
+                    },
+                    protocol: ProtocolMetrics::default(),
+                    channel: ChannelMetrics::default(),
+                    reverse_channel: ChannelMetrics::default(),
                 },
-                TimingMetrics {
-                    duration_secs: elapsed,
-                    total_rtt_samples: 0,
-                    karn_rejected_count: 0,
-                    min_rtt_ms: 0.0,
-                    max_rtt_ms: 0.0,
-                    mean_rtt_ms: 0.0,
-                    final_srtt_ms: 0.0,
-                    final_rttvar_ms: 0.0,
-                    final_rto_ms: 0.0,
-                    timeout_count: 0,
-                    backoff_count: 0,
-                },
-                ProtocolMetrics::default(),
-                ChannelMetrics::default(),
-                ChannelMetrics::default(),
             );
 
             if let Some(csv_path) = csv_out {
@@ -420,9 +422,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let mut reassembler = Reassembler::new();
 
             let start = Instant::now();
-            let mut retransmissions: u64 = 0;
-
-            match proto {
+            let retransmissions = match proto {
                 ProtocolType::StopAndWait => {
                     let mut sender = StopAndWaitSender::new(10);
                     let mut receiver = StopAndWaitReceiver::new();
@@ -483,7 +483,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for chunk in receiver.drain_delivered() {
                         reassembler.push_chunk(reassembler.next_expected_seq, &chunk);
                     }
-                    retransmissions = sender.retransmissions;
+                    sender.retransmissions
                 }
 
                 ProtocolType::GoBackN => {
@@ -526,7 +526,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for chunk in receiver.drain_delivered() {
                         reassembler.push_chunk(reassembler.next_expected_seq, &chunk);
                     }
-                    retransmissions = sender.retransmissions;
+                    sender.retransmissions
                 }
 
                 ProtocolType::SelectiveRepeat => {
@@ -556,9 +556,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     for chunk in receiver.drain_delivered() {
                         reassembler.push_chunk(reassembler.next_expected_seq, &chunk);
                     }
-                    retransmissions = sender.retransmissions;
+                    sender.retransmissions
                 }
-            }
+            };
 
             let elapsed = start.elapsed().as_secs_f64();
             let reconstructed_sha = reassembler.sha256_digest();
@@ -807,13 +807,10 @@ fn run_experiment_command(args: RunExperimentArgs) -> Result<(), Box<dyn std::er
     }
 
     if record.app.transfer_status != "SUCCESS" {
-        return Err(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            format!(
-                "transfer finished with status {}",
-                record.app.transfer_status
-            ),
-        )
+        return Err(std::io::Error::other(format!(
+            "transfer finished with status {}",
+            record.app.transfer_status
+        ))
         .into());
     }
     Ok(())

@@ -138,6 +138,17 @@ pub struct ChannelMetrics {
     pub scheduled_deliveries: usize,
 }
 
+/// Measured outcomes for one trial. This is only the constructor input for
+/// `ExperimentRecord::new`. It is not part of the JSON or CSV schema.
+#[derive(Debug, Clone)]
+pub struct ExperimentMeasurements {
+    pub app: ApplicationMetrics,
+    pub timing: TimingMetrics,
+    pub protocol: ProtocolMetrics,
+    pub channel: ChannelMetrics,
+    pub reverse_channel: ChannelMetrics,
+}
+
 /// One trial. Nested JSON objects keep configuration separate from counters.
 /// The CSV row is the same information in the column order of `csv_header`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -168,12 +179,15 @@ impl ExperimentRecord {
         forward_config: ForwardChannelConfig,
         reverse_config: ReverseChannelConfig,
         rto_config: RtoParameters,
-        mut app: ApplicationMetrics,
-        timing: TimingMetrics,
-        protocol: ProtocolMetrics,
-        channel: ChannelMetrics,
-        reverse_channel: ChannelMetrics,
+        measurements: ExperimentMeasurements,
     ) -> Self {
+        let ExperimentMeasurements {
+            mut app,
+            timing,
+            protocol,
+            channel,
+            reverse_channel,
+        } = measurements;
         app.sha256_match = app.source_sha256 == app.delivered_sha256;
 
         let goodput_bytes_sec =
@@ -211,9 +225,7 @@ impl ExperimentRecord {
 
     /// Saves the trial record as a JSON file.
     pub fn save_json<P: AsRef<Path>>(&self, path: P) -> io::Result<()> {
-        let json_str = self
-            .to_json()
-            .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+        let json_str = self.to_json().map_err(io::Error::other)?;
         let mut file = File::create(path)?;
         file.write_all(json_str.as_bytes())?;
         Ok(())
@@ -495,51 +507,53 @@ mod tests {
                 beta: 0.25,
                 k: 4.0,
             },
-            ApplicationMetrics {
-                source_bytes: 14000,
-                delivered_unique_bytes: if status == "SUCCESS" { 14000 } else { 0 },
-                transfer_status: status.to_string(),
-                sha256_match: !hashes_match,
-                source_sha256: digest.clone(),
-                delivered_sha256: if hashes_match {
-                    digest
-                } else {
-                    "other".to_string()
+            ExperimentMeasurements {
+                app: ApplicationMetrics {
+                    source_bytes: 14000,
+                    delivered_unique_bytes: if status == "SUCCESS" { 14000 } else { 0 },
+                    transfer_status: status.to_string(),
+                    sha256_match: !hashes_match,
+                    source_sha256: digest.clone(),
+                    delivered_sha256: if hashes_match {
+                        digest
+                    } else {
+                        "other".to_string()
+                    },
                 },
+                timing: TimingMetrics {
+                    duration_secs: 2.0,
+                    total_rtt_samples: 10,
+                    karn_rejected_count: 1,
+                    min_rtt_ms: 20.0,
+                    max_rtt_ms: 35.0,
+                    mean_rtt_ms: 25.0,
+                    final_srtt_ms: 24.5,
+                    final_rttvar_ms: 3.2,
+                    final_rto_ms: 40.0,
+                    timeout_count: 1,
+                    backoff_count: 1,
+                },
+                protocol: ProtocolMetrics {
+                    data_sent: 12,
+                    ack_sent: 11,
+                    data_received: 12,
+                    ack_received: 11,
+                    data_retransmissions: 2,
+                    timeout_retransmissions: 2,
+                    premature_retransmissions: 1,
+                    duplicate_data_received: 1,
+                    duplicate_acks_received: 0,
+                },
+                channel: ChannelMetrics {
+                    offered_datagrams: 23,
+                    dropped_datagrams: 1,
+                    duplicated_datagrams: 1,
+                    corrupted_datagrams: 0,
+                    reordered_datagrams: 2,
+                    scheduled_deliveries: 23,
+                },
+                reverse_channel: ChannelMetrics::default(),
             },
-            TimingMetrics {
-                duration_secs: 2.0,
-                total_rtt_samples: 10,
-                karn_rejected_count: 1,
-                min_rtt_ms: 20.0,
-                max_rtt_ms: 35.0,
-                mean_rtt_ms: 25.0,
-                final_srtt_ms: 24.5,
-                final_rttvar_ms: 3.2,
-                final_rto_ms: 40.0,
-                timeout_count: 1,
-                backoff_count: 1,
-            },
-            ProtocolMetrics {
-                data_sent: 12,
-                ack_sent: 11,
-                data_received: 12,
-                ack_received: 11,
-                data_retransmissions: 2,
-                timeout_retransmissions: 2,
-                premature_retransmissions: 1,
-                duplicate_data_received: 1,
-                duplicate_acks_received: 0,
-            },
-            ChannelMetrics {
-                offered_datagrams: 23,
-                dropped_datagrams: 1,
-                duplicated_datagrams: 1,
-                corrupted_datagrams: 0,
-                reordered_datagrams: 2,
-                scheduled_deliveries: 23,
-            },
-            ChannelMetrics::default(),
         )
     }
 

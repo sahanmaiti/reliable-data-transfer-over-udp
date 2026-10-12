@@ -156,7 +156,11 @@ impl StopAndWaitReceiver {
                 } else {
                     // Out-of-order future packet (should not happen in S&W under normal conditions,
                     // but if it arrives, re-ACK the last acknowledged sequence number).
-                    let last_ack = if self.expected_seq > 0 { self.expected_seq - 1 } else { 0 };
+                    let last_ack = if self.expected_seq > 0 {
+                        self.expected_seq - 1
+                    } else {
+                        0
+                    };
                     let mut ack = Packet::new_ack(last_ack);
                     ack.compute_and_set_checksum();
                     Some(ack)

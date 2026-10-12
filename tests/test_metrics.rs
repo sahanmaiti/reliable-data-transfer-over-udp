@@ -2,8 +2,8 @@
 // Integration Tests: Metrics and CSV / JSON Reporting
 
 use reliable_udp::metrics::{
-    ApplicationMetrics, ChannelMetrics, ExperimentMeta, ExperimentRecord, ForwardChannelConfig,
-    ProtocolMetrics, ReverseChannelConfig, RtoParameters, TimingMetrics,
+    ApplicationMetrics, ChannelMetrics, ExperimentMeasurements, ExperimentMeta, ExperimentRecord,
+    ForwardChannelConfig, ProtocolMetrics, ReverseChannelConfig, RtoParameters, TimingMetrics,
 };
 
 fn record() -> ExperimentRecord {
@@ -45,47 +45,49 @@ fn record() -> ExperimentRecord {
             beta: 0.25,
             k: 4.0,
         },
-        ApplicationMetrics {
-            source_bytes: 28000,
-            delivered_unique_bytes: 28000,
-            transfer_status: "SUCCESS".to_string(),
-            sha256_match: false,
-            source_sha256: "hash_original".to_string(),
-            delivered_sha256: "hash_original".to_string(),
+        ExperimentMeasurements {
+            app: ApplicationMetrics {
+                source_bytes: 28000,
+                delivered_unique_bytes: 28000,
+                transfer_status: "SUCCESS".to_string(),
+                sha256_match: false,
+                source_sha256: "hash_original".to_string(),
+                delivered_sha256: "hash_original".to_string(),
+            },
+            timing: TimingMetrics {
+                duration_secs: 4.0,
+                total_rtt_samples: 20,
+                karn_rejected_count: 3,
+                min_rtt_ms: 10.0,
+                max_rtt_ms: 25.0,
+                mean_rtt_ms: 15.0,
+                final_srtt_ms: 15.2,
+                final_rttvar_ms: 2.1,
+                final_rto_ms: 35.0,
+                timeout_count: 2,
+                backoff_count: 2,
+            },
+            protocol: ProtocolMetrics {
+                data_sent: 25,
+                ack_sent: 23,
+                data_received: 25,
+                ack_received: 23,
+                data_retransmissions: 5,
+                timeout_retransmissions: 5,
+                premature_retransmissions: 1,
+                duplicate_data_received: 2,
+                duplicate_acks_received: 1,
+            },
+            channel: ChannelMetrics {
+                offered_datagrams: 30,
+                dropped_datagrams: 2,
+                duplicated_datagrams: 0,
+                corrupted_datagrams: 0,
+                reordered_datagrams: 1,
+                scheduled_deliveries: 28,
+            },
+            reverse_channel: ChannelMetrics::default(),
         },
-        TimingMetrics {
-            duration_secs: 4.0,
-            total_rtt_samples: 20,
-            karn_rejected_count: 3,
-            min_rtt_ms: 10.0,
-            max_rtt_ms: 25.0,
-            mean_rtt_ms: 15.0,
-            final_srtt_ms: 15.2,
-            final_rttvar_ms: 2.1,
-            final_rto_ms: 35.0,
-            timeout_count: 2,
-            backoff_count: 2,
-        },
-        ProtocolMetrics {
-            data_sent: 25,
-            ack_sent: 23,
-            data_received: 25,
-            ack_received: 23,
-            data_retransmissions: 5,
-            timeout_retransmissions: 5,
-            premature_retransmissions: 1,
-            duplicate_data_received: 2,
-            duplicate_acks_received: 1,
-        },
-        ChannelMetrics {
-            offered_datagrams: 30,
-            dropped_datagrams: 2,
-            duplicated_datagrams: 0,
-            corrupted_datagrams: 0,
-            reordered_datagrams: 1,
-            scheduled_deliveries: 28,
-        },
-        ChannelMetrics::default(),
     )
 }
 

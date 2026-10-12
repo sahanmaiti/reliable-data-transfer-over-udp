@@ -15,8 +15,8 @@ use crate::arq::{
 use crate::channel::scheduler::ChannelScheduler;
 use crate::channel::{Channel, ChannelConfig};
 use crate::metrics::{
-    ApplicationMetrics, ChannelMetrics, ExperimentMeta, ExperimentRecord, ForwardChannelConfig,
-    ProtocolMetrics, ReverseChannelConfig, RtoParameters, TimingMetrics,
+    ApplicationMetrics, ChannelMetrics, ExperimentMeasurements, ExperimentMeta, ExperimentRecord,
+    ForwardChannelConfig, ProtocolMetrics, ReverseChannelConfig, RtoParameters, TimingMetrics,
 };
 use crate::packet::{Packet, PacketType, MAX_PAYLOAD_SIZE};
 use crate::timing::{MultiTimer, RetransmissionTimer, RtoConfig, RtoEstimator};
@@ -243,18 +243,20 @@ fn aborted(config: &TransferConfig, status: &str) -> TransferOutput {
         forward_record(&forward),
         reverse_record(&reverse),
         rto_parameters(&estimator_config(config)),
-        ApplicationMetrics {
-            source_bytes: config.payload.len() as u64,
-            delivered_unique_bytes: 0,
-            transfer_status: status.to_string(),
-            sha256_match: false,
-            source_sha256: source_sha,
-            delivered_sha256: delivered_sha,
+        ExperimentMeasurements {
+            app: ApplicationMetrics {
+                source_bytes: config.payload.len() as u64,
+                delivered_unique_bytes: 0,
+                transfer_status: status.to_string(),
+                sha256_match: false,
+                source_sha256: source_sha,
+                delivered_sha256: delivered_sha,
+            },
+            timing: zero_timing(),
+            protocol: ProtocolMetrics::default(),
+            channel: ChannelMetrics::default(),
+            reverse_channel: ChannelMetrics::default(),
         },
-        zero_timing(),
-        ProtocolMetrics::default(),
-        ChannelMetrics::default(),
-        ChannelMetrics::default(),
     );
     TransferOutput {
         record,
@@ -927,41 +929,43 @@ impl Driver {
             forward_config,
             reverse_config,
             rto_config,
-            ApplicationMetrics {
-                source_bytes: self.source_len,
-                delivered_unique_bytes: self.reassembler.total_bytes_accepted as u64,
-                transfer_status: status.to_string(),
-                sha256_match: hash_ok,
-                source_sha256: self.source_sha,
-                delivered_sha256: delivered_sha,
+            ExperimentMeasurements {
+                app: ApplicationMetrics {
+                    source_bytes: self.source_len,
+                    delivered_unique_bytes: self.reassembler.total_bytes_accepted as u64,
+                    transfer_status: status.to_string(),
+                    sha256_match: hash_ok,
+                    source_sha256: self.source_sha,
+                    delivered_sha256: delivered_sha,
+                },
+                timing: TimingMetrics {
+                    duration_secs: duration.as_secs_f64(),
+                    total_rtt_samples: sample_count,
+                    karn_rejected_count: karn_rejected as usize,
+                    min_rtt_ms,
+                    max_rtt_ms,
+                    mean_rtt_ms,
+                    final_srtt_ms,
+                    final_rttvar_ms,
+                    final_rto_ms,
+                    timeout_count,
+                    backoff_count,
+                },
+                protocol: ProtocolMetrics {
+                    data_sent: data_sent as usize,
+                    ack_sent: self.ack_sent as usize,
+                    data_received: self.data_received as usize,
+                    ack_received: self.ack_received as usize,
+                    data_retransmissions: retransmissions as usize,
+                    // Packets resubmitted from fire_timers. This driver has no other retransmission path.
+                    timeout_retransmissions: self.retx_submitted as usize,
+                    premature_retransmissions: self.premature as usize,
+                    duplicate_data_received: self.duplicate_data as usize,
+                    duplicate_acks_received: self.duplicate_acks as usize,
+                },
+                channel: forward_channel,
+                reverse_channel: reverse_channel.clone(),
             },
-            TimingMetrics {
-                duration_secs: duration.as_secs_f64(),
-                total_rtt_samples: sample_count,
-                karn_rejected_count: karn_rejected as usize,
-                min_rtt_ms,
-                max_rtt_ms,
-                mean_rtt_ms,
-                final_srtt_ms,
-                final_rttvar_ms,
-                final_rto_ms,
-                timeout_count,
-                backoff_count,
-            },
-            ProtocolMetrics {
-                data_sent: data_sent as usize,
-                ack_sent: self.ack_sent as usize,
-                data_received: self.data_received as usize,
-                ack_received: self.ack_received as usize,
-                data_retransmissions: retransmissions as usize,
-                // Packets resubmitted from fire_timers. This driver has no other retransmission path.
-                timeout_retransmissions: self.retx_submitted as usize,
-                premature_retransmissions: self.premature as usize,
-                duplicate_data_received: self.duplicate_data as usize,
-                duplicate_acks_received: self.duplicate_acks as usize,
-            },
-            forward_channel,
-            reverse_channel.clone(),
         );
 
         TransferOutput {

@@ -369,12 +369,10 @@ pub fn recv_file_on_socket<P: AsRef<Path>>(
                         }
                         absorb(&mut engine, &mut reassembler);
 
-                        if pkt.pkt_type == PacketType::Fin {
-                            if !fin_seen {
-                                fin_seen = true;
-                                reassembler.write_to_disk(output)?;
-                                linger_until = Some(Instant::now() + config.recv_linger);
-                            }
+                        if pkt.pkt_type == PacketType::Fin && !fin_seen {
+                            fin_seen = true;
+                            reassembler.write_to_disk(output)?;
+                            linger_until = Some(Instant::now() + config.recv_linger);
                         }
                     }
                     PacketType::Ack => {

@@ -65,7 +65,10 @@ fn test_checksum_detects_bit_corruption() {
     wire_bytes[last_idx] ^= 0x01; // flip single bit
 
     let corrupted_pkt = Packet::deserialize(&wire_bytes).expect("Should deserialize structure");
-    assert!(!corrupted_pkt.is_valid(), "Checksum must detect flipped payload bit!");
+    assert!(
+        !corrupted_pkt.is_valid(),
+        "Checksum must detect flipped payload bit!"
+    );
 }
 
 #[test]

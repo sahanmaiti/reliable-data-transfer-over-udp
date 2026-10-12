@@ -176,7 +176,10 @@ fn test_multi_timer_selective_repeat() {
     multi.start_timer_at(103, t0, Duration::from_millis(50));
 
     assert_eq!(multi.len(), 3);
-    assert_eq!(multi.earliest_deadline(), Some(t0 + Duration::from_millis(10)));
+    assert_eq!(
+        multi.earliest_deadline(),
+        Some(t0 + Duration::from_millis(10))
+    );
 
     // At 20ms: key 102 should be expired
     let expired = multi.pop_expired_at(t0 + Duration::from_millis(20));

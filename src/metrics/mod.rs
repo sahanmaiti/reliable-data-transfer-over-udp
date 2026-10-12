@@ -5,6 +5,6 @@
 pub mod collector;
 
 pub use collector::{
-    ApplicationMetrics, ChannelMetrics, ExperimentMeta, ExperimentRecord, ForwardChannelConfig,
-    ProtocolMetrics, ReverseChannelConfig, RtoParameters, TimingMetrics,
+    ApplicationMetrics, ChannelMetrics, ExperimentMeasurements, ExperimentMeta, ExperimentRecord,
+    ForwardChannelConfig, ProtocolMetrics, ReverseChannelConfig, RtoParameters, TimingMetrics,
 };

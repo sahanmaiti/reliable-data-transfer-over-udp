@@ -262,3 +262,9 @@ impl RtoEstimator {
         "srtt_ms,rttvar_ms,current_rto_ms,mean_rtt_ms,sample_count,karn_rejected_count,timeout_count,backoff_count"
     }
 }
+
+impl Default for RtoEstimator {
+    fn default() -> Self {
+        Self::new()
+    }
+}
