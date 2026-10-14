@@ -104,7 +104,7 @@ Day 14     : Code freeze, viva defense mock, documentation finalization, demo pr
 - [x] Write Python automation script `experiments/python/run_experiments.py`.
 - [x] Run parameter sweep: Reordering Rate (0% to 25%) across Stop-and-Wait, GBN, and SR.
 - [x] Generate comparative plots: Retransmissions vs Reordering, Goodput vs Loss.
-- [ ] Write final report, prepare viva answers, and conduct dry run.
+- [x] Write final report, prepare viva answers, and conduct dry run.
 
 ---
 

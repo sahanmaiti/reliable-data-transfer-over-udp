@@ -136,8 +136,8 @@ def plot_with_matplotlib(summary, plots_dir: Path):
     print(f"[+] Saved plot: {out_file2}")
 
 
-def generate_svg_plot(summary, plots_dir: Path):
-    """Pure Python SVG generator (fallback when matplotlib is not installed)."""
+def generate_svg_retrans_vs_reorder(summary, plots_dir: Path):
+    """Pure Python SVG generator for Retransmissions vs Reordering Rate."""
     plots_dir.mkdir(parents=True, exist_ok=True)
     svg_path = plots_dir / "retransmissions_vs_reordering.svg"
 
@@ -145,29 +145,23 @@ def generate_svg_plot(summary, plots_dir: Path):
     colors = {"StopAndWait": "#e74c3c", "GoBackN": "#e67e22", "SelectiveRepeat": "#27ae60"}
     reorder_x = [0.0, 0.05, 0.10, 0.15, 0.20, 0.25]
 
-    # Canvas dimensions
     width, height = 750, 450
     margin_l, margin_r, margin_t, margin_b = 80, 50, 60, 60
     plot_w = width - margin_l - margin_r
     plot_h = height - margin_t - margin_b
-
-    max_y = 120  # Max retransmissions scale
+    max_y = 120
 
     svg = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
         f'<rect width="{width}" height="{height}" fill="#ffffff" />',
-        f'<text x="{width/2}" y="32" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold">ARQ Retransmissions vs. Packet Reordering Rate (Loss = 0%)</text>',
-        f'<text x="{width/2}" y="50" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#555555">Validating: Selective Repeat requires fewer retransmissions than Go-Back-N</text>',
-        # Axes
+        f'<text x="{width/2}" y="30" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold">ARQ Retransmissions vs. Packet Reordering Rate (Loss = 0%)</text>',
+        f'<text x="{width/2}" y="48" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#555555">Validating: Selective Repeat requires significantly fewer retransmissions than Go-Back-N</text>',
         f'<line x1="{margin_l}" y1="{height - margin_b}" x2="{width - margin_r}" y2="{height - margin_b}" stroke="#333" stroke-width="2"/>',
         f'<line x1="{margin_l}" y1="{margin_t}" x2="{margin_l}" y2="{height - margin_b}" stroke="#333" stroke-width="2"/>',
-        # X axis label
         f'<text x="{margin_l + plot_w/2}" y="{height - 18}" text-anchor="middle" font-family="sans-serif" font-size="13">Packet Reordering Rate (%)</text>',
-        # Y axis label
-        f'<text x="25" y="{margin_t + plot_h/2}" text-anchor="middle" font-family="sans-serif" font-size="13" transform="rotate(-90 25 {margin_t + plot_h/2})">Mean Data Retransmissions</text>',
+        f'<text x="25" y="{margin_t + plot_h/2}" text-anchor="middle" font-family="sans-serif" font-size="13" transform="rotate(-90 25 {margin_t + plot_h/2})">Mean Data Retransmissions (packets)</text>',
     ]
 
-    # Grid & Ticks
     for y_val in [0, 30, 60, 90, 120]:
         py = (height - margin_b) - (y_val / max_y) * plot_h
         svg.append(f'<line x1="{margin_l}" y1="{py}" x2="{width - margin_r}" y2="{py}" stroke="#eeeeee" stroke-width="1"/>')
@@ -177,7 +171,6 @@ def generate_svg_plot(summary, plots_dir: Path):
         px = margin_l + (r / 0.25) * plot_w
         svg.append(f'<text x="{px}" y="{height - margin_b + 20}" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">{int(r*100)}%</text>')
 
-    # Lines for protocols
     for proto in protocols:
         points = []
         for r in reorder_x:
@@ -191,8 +184,136 @@ def generate_svg_plot(summary, plots_dir: Path):
         for x, y in points:
             svg.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{colors[proto]}" stroke="#ffffff" stroke-width="1.5" />')
 
-    # Legend
     leg_x = margin_l + 20
+    leg_y = margin_t + 10
+    svg.append(f'<rect x="{leg_x}" y="{leg_y}" width="180" height="85" fill="#fdfdfd" stroke="#cccccc" rx="4" />')
+    for i, proto in enumerate(protocols):
+        ly = leg_y + 22 + i * 22
+        svg.append(f'<line x1="{leg_x + 12}" y1="{ly}" x2="{leg_x + 35}" y2="{ly}" stroke="{colors[proto]}" stroke-width="3"/>')
+        svg.append(f'<circle cx="{leg_x + 23.5}" cy="{ly}" r="4" fill="{colors[proto]}"/>')
+        svg.append(f'<text x="{leg_x + 45}" y="{ly + 4}" font-family="sans-serif" font-size="12" fill="#333333">{proto}</text>')
+
+    svg.append("</svg>")
+
+    with open(svg_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(svg))
+    print(f"[+] Saved standalone SVG plot: {svg_path}")
+
+
+def generate_svg_goodput_vs_reorder(summary, plots_dir: Path):
+    """Pure Python SVG generator for Effective Goodput vs Reordering Rate."""
+    plots_dir.mkdir(parents=True, exist_ok=True)
+    svg_path = plots_dir / "goodput_vs_reordering.svg"
+
+    protocols = ["StopAndWait", "GoBackN", "SelectiveRepeat"]
+    colors = {"StopAndWait": "#e74c3c", "GoBackN": "#e67e22", "SelectiveRepeat": "#27ae60"}
+    reorder_x = [0.0, 0.05, 0.10, 0.15, 0.20, 0.25]
+
+    width, height = 750, 450
+    margin_l, margin_r, margin_t, margin_b = 80, 50, 60, 60
+    plot_w = width - margin_l - margin_r
+    plot_h = height - margin_t - margin_b
+    max_y = 400.0  # Max Goodput in KB/s
+
+    svg = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
+        f'<rect width="{width}" height="{height}" fill="#ffffff" />',
+        f'<text x="{width/2}" y="30" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold">Effective Goodput vs. Packet Reordering Rate (Loss = 0%)</text>',
+        f'<text x="{width/2}" y="48" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#555555">Demonstrating throughput degradation in Go-Back-N due to window discarding</text>',
+        f'<line x1="{margin_l}" y1="{height - margin_b}" x2="{width - margin_r}" y2="{height - margin_b}" stroke="#333" stroke-width="2"/>',
+        f'<line x1="{margin_l}" y1="{margin_t}" x2="{margin_l}" y2="{height - margin_b}" stroke="#333" stroke-width="2"/>',
+        f'<text x="{margin_l + plot_w/2}" y="{height - 18}" text-anchor="middle" font-family="sans-serif" font-size="13">Packet Reordering Rate (%)</text>',
+        f'<text x="25" y="{margin_t + plot_h/2}" text-anchor="middle" font-family="sans-serif" font-size="13" transform="rotate(-90 25 {margin_t + plot_h/2})">Goodput (KB/s)</text>',
+    ]
+
+    for y_val in [0, 100, 200, 300, 400]:
+        py = (height - margin_b) - (y_val / max_y) * plot_h
+        svg.append(f'<line x1="{margin_l}" y1="{py}" x2="{width - margin_r}" y2="{py}" stroke="#eeeeee" stroke-width="1"/>')
+        svg.append(f'<text x="{margin_l - 10}" y="{py + 4}" text-anchor="end" font-family="sans-serif" font-size="11" fill="#666">{y_val}</text>')
+
+    for r in reorder_x:
+        px = margin_l + (r / 0.25) * plot_w
+        svg.append(f'<text x="{px}" y="{height - margin_b + 20}" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">{int(r*100)}%</text>')
+
+    for proto in protocols:
+        points = []
+        for r in reorder_x:
+            y = summary.get((proto, r, 0.0), {}).get("mean_goodput_kbps", 0)
+            px = margin_l + (r / 0.25) * plot_w
+            py = (height - margin_b) - (min(y, max_y) / max_y) * plot_h
+            points.append((px, py))
+
+        polyline = " ".join([f"{x:.1f},{y:.1f}" for x, y in points])
+        svg.append(f'<polyline points="{polyline}" fill="none" stroke="{colors[proto]}" stroke-width="3" />')
+        for x, y in points:
+            svg.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{colors[proto]}" stroke="#ffffff" stroke-width="1.5" />')
+
+    # Legend top right
+    leg_x = width - margin_r - 190
+    leg_y = margin_t + 10
+    svg.append(f'<rect x="{leg_x}" y="{leg_y}" width="180" height="85" fill="#fdfdfd" stroke="#cccccc" rx="4" />')
+    for i, proto in enumerate(protocols):
+        ly = leg_y + 22 + i * 22
+        svg.append(f'<line x1="{leg_x + 12}" y1="{ly}" x2="{leg_x + 35}" y2="{ly}" stroke="{colors[proto]}" stroke-width="3"/>')
+        svg.append(f'<circle cx="{leg_x + 23.5}" cy="{ly}" r="4" fill="{colors[proto]}"/>')
+        svg.append(f'<text x="{leg_x + 45}" y="{ly + 4}" font-family="sans-serif" font-size="12" fill="#333333">{proto}</text>')
+
+    svg.append("</svg>")
+
+    with open(svg_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(svg))
+    print(f"[+] Saved standalone SVG plot: {svg_path}")
+
+
+def generate_svg_goodput_vs_loss(summary, plots_dir: Path):
+    """Pure Python SVG generator for Effective Goodput vs Packet Loss Rate."""
+    plots_dir.mkdir(parents=True, exist_ok=True)
+    svg_path = plots_dir / "goodput_vs_loss.svg"
+
+    protocols = ["StopAndWait", "GoBackN", "SelectiveRepeat"]
+    colors = {"StopAndWait": "#e74c3c", "GoBackN": "#e67e22", "SelectiveRepeat": "#27ae60"}
+    loss_x = [0.0, 0.02, 0.05, 0.10]
+
+    width, height = 750, 450
+    margin_l, margin_r, margin_t, margin_b = 80, 50, 60, 60
+    plot_w = width - margin_l - margin_r
+    plot_h = height - margin_t - margin_b
+    max_y = 400.0
+
+    svg = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
+        f'<rect width="{width}" height="{height}" fill="#ffffff" />',
+        f'<text x="{width/2}" y="30" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold">Effective Goodput vs. Packet Loss Rate (Reorder = 0%)</text>',
+        f'<text x="{width/2}" y="48" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#555555">Impact of channel loss on pipeline efficiency and retransmission overhead</text>',
+        f'<line x1="{margin_l}" y1="{height - margin_b}" x2="{width - margin_r}" y2="{height - margin_b}" stroke="#333" stroke-width="2"/>',
+        f'<line x1="{margin_l}" y1="{margin_t}" x2="{margin_l}" y2="{height - margin_b}" stroke="#333" stroke-width="2"/>',
+        f'<text x="{margin_l + plot_w/2}" y="{height - 18}" text-anchor="middle" font-family="sans-serif" font-size="13">Packet Loss Rate (%)</text>',
+        f'<text x="25" y="{margin_t + plot_h/2}" text-anchor="middle" font-family="sans-serif" font-size="13" transform="rotate(-90 25 {margin_t + plot_h/2})">Goodput (KB/s)</text>',
+    ]
+
+    for y_val in [0, 100, 200, 300, 400]:
+        py = (height - margin_b) - (y_val / max_y) * plot_h
+        svg.append(f'<line x1="{margin_l}" y1="{py}" x2="{width - margin_r}" y2="{py}" stroke="#eeeeee" stroke-width="1"/>')
+        svg.append(f'<text x="{margin_l - 10}" y="{py + 4}" text-anchor="end" font-family="sans-serif" font-size="11" fill="#666">{y_val}</text>')
+
+    for l in loss_x:
+        px = margin_l + (l / 0.10) * plot_w
+        svg.append(f'<text x="{px}" y="{height - margin_b + 20}" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">{int(l*100)}%</text>')
+
+    for proto in protocols:
+        points = []
+        for l in loss_x:
+            y = summary.get((proto, 0.0, l), {}).get("mean_goodput_kbps", 0)
+            px = margin_l + (l / 0.10) * plot_w
+            py = (height - margin_b) - (min(y, max_y) / max_y) * plot_h
+            points.append((px, py))
+
+        polyline = " ".join([f"{x:.1f},{y:.1f}" for x, y in points])
+        svg.append(f'<polyline points="{polyline}" fill="none" stroke="{colors[proto]}" stroke-width="3" />')
+        for x, y in points:
+            svg.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.5" fill="{colors[proto]}" stroke="#ffffff" stroke-width="1.5" />')
+
+    leg_x = width - margin_r - 190
     leg_y = margin_t + 10
     svg.append(f'<rect x="{leg_x}" y="{leg_y}" width="180" height="85" fill="#fdfdfd" stroke="#cccccc" rx="4" />')
     for i, proto in enumerate(protocols):
@@ -210,7 +331,7 @@ def generate_svg_plot(summary, plots_dir: Path):
 
 def main():
     csv_file = Path("results/raw/experiments_raw.csv")
-    plots_dir = Path("plots")
+    plots_dirs = [Path("plots"), Path("experiments/python/plots")]
 
     if not csv_file.exists():
         print(f"[-] CSV file {csv_file} not found. Running experiment generator first...")
@@ -220,12 +341,14 @@ def main():
     rows = load_raw_csv(csv_file)
     summary = aggregate_stats(rows)
 
-    generate_svg_plot(summary, plots_dir)
+    for p_dir in plots_dirs:
+        generate_svg_retrans_vs_reorder(summary, p_dir)
+        generate_svg_goodput_vs_reorder(summary, p_dir)
+        generate_svg_goodput_vs_loss(summary, p_dir)
+        if HAS_MATPLOTLIB:
+            plot_with_matplotlib(summary, p_dir)
 
-    if HAS_MATPLOTLIB:
-        plot_with_matplotlib(summary, plots_dir)
-    else:
-        print("[!] Note: Install pandas and matplotlib ('pip install -r experiments/python/requirements.txt') for high-res PNG plots.")
+    print("[+] All experimental comparison visualizations generated successfully.")
 
 
 if __name__ == "__main__":

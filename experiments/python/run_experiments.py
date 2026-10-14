@@ -144,7 +144,7 @@ def run_experiment_matrix(output_csv: Path, output_json: Path, num_seeds: int = 
 
         for protocol in PROTOCOLS:
             for reorder_rate in REORDER_RATES:
-                for loss_rate in [0.0, 0.05]:  # Fix loss at 0% and 5% for reordering study
+                for loss_rate in LOSS_RATES:  # Sweep all loss rates (0%, 2%, 5%, 10%)
                     for trial_idx, seed in enumerate(SEEDS[:num_seeds]):
                         record = generate_synthetic_trial(
                             protocol=protocol,
