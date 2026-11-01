@@ -1,8 +1,16 @@
 # 2-Week Accelerated Project Roadmap & Task Distribution
 
+> **Historical planning document.** Kept for process provenance. For current behaviour, experiments, and commands, use `README.md`, `docs/FINAL_REPORT.md`, and `docs/REPRODUCIBILITY.md`.
+
 **Project:** Reliable Data Transfer over UDP (CS-30003)  
-**Team Lead:** Sahan Maiti  
 **Timeline:** 14 Days (Two 7-Day Sprints)  
+
+**Team responsibility areas** (not a claim that every listed task was completed solely by one person):
+
+- Soumyadeb Mukherjee (24052329) — Protocol & ARQ
+- Kashish Gupta (24052495) — Timing & RTO
+- Ashwika Burman (24155095) — Channel Emulator
+- Sahan Maiti (24052247) — Evaluation & Integration
 
 ---
 
@@ -33,10 +41,10 @@ Day 14     : Code freeze, viva defense mock, documentation finalization, demo pr
 
 | Member | Primary Ownership | Secondary / Integration |
 |---|---|---|
-| **Sahan Maiti** *(Lead)* | System Integration, File I/O, SHA-256, Metrics Logging, Python Testbed, Plots | Architecture, PR Reviews, End-to-End Testing |
-| **Soumyadeb Mukherjee** | Protocol & ARQ State Machines (`packet.rs`, `sw.rs`, `gbn.rs`, `sr.rs`) | Conformance testing, RFC 1071 Checksum |
-| **Kashish Gupta** | Retransmission Timing & RTO (`rto.rs`, `timer.rs`, Jacobson/Karels, Karn) | Timer unit tests, timeout backoff |
-| **Ashwika Burman** | Deterministic Channel Emulator (`channel.rs`, Loss/Drop/Corrupt/Reorder) | Seed repeatability, channel stress tests |
+| **Soumyadeb Mukherjee** (24052329) — Protocol & ARQ | Protocol & ARQ state machines (`packet.rs`, `sw.rs`, `gbn.rs`, `sr.rs`) | Conformance testing, RFC 1071 checksum |
+| **Kashish Gupta** (24052495) — Timing & RTO | Retransmission timing & RTO (`rto.rs`, `timer.rs`, Jacobson/Karels, Karn) | Timer unit tests, timeout backoff |
+| **Ashwika Burman** (24155095) — Channel Emulator | Deterministic channel emulator (loss/dup/reorder/corrupt/delay) | Seed repeatability, channel stress tests |
+| **Sahan Maiti** (24052247) — Evaluation & Integration | System integration, file I/O, SHA-256, metrics, Python testbed, plots | Architecture, PR reviews, end-to-end validation |
 
 ---
 
@@ -73,7 +81,7 @@ Day 14     : Code freeze, viva defense mock, documentation finalization, demo pr
   - **Packet Reordering**: buffer packets with small random delays before release.
 - [x] Deliver unit tests verifying: same seed produces the exact identical sequence of drops/corruptions.
 
-### Track D: Sahan Maiti (Lead — Integration & Harness)
+### Track D: Sahan Maiti (Evaluation & Integration)
 - [x] Set up project structure, modules in `src/lib.rs`, and dependencies in `Cargo.toml`.
 - [x] Build file chunker (reading files in 1400-byte chunks) and file reassembler in `src/app/`.
 - [x] Build SHA-256 end-to-end checksum verification tool.
@@ -125,4 +133,4 @@ Day 14     : Code freeze, viva defense mock, documentation finalization, demo pr
    - All code compiles cleanly (`cargo check`).
    - All tests pass (`cargo test`).
    - No compiler warnings allowed (`#[deny(warnings)]`).
-   - At least 1 peer review approval (Lead review required).
+   - At least 1 peer review approval.

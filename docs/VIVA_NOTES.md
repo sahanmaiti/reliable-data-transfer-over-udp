@@ -1,77 +1,109 @@
-# Viva Preparation & Defense Notes
+# Viva Notes
 
-**Author:** Soumyadeb Mukherjee  
-**Component:** Protocol & ARQ  
-**Course:** CS-30003  
+Concise answers aligned with the **implemented** system. Prefer pointing at files over slogans.
 
 ---
 
-## 1. Core Concepts & "Why" Questions
+### UDP / Networking
 
-### Q1: Why build reliable data transfer over UDP instead of just using TCP?
-**A:**  
-* TCP bundles together reliability, in-order delivery, connection management, and congestion control into an unmodifiable kernel implementation.
-* Building reliability over raw UDP allows us to inspect, isolate, and test individual mechanisms (e.g., comparing Stop-and-Wait vs. Go-Back-N vs. Selective Repeat under identical synthetic packet loss and reordering) without kernel interference or congestion backoff skewing the experimental results.
+**1. Why UDP instead of TCP?**  
+TCP already bundles reliability and congestion control in the kernel. The assignment is to build and compare ARQ mechanisms ourselves under controlled impairments.
 
-### Q2: Why do we need sequence numbers?
-**A:**  
-* UDP is connectionless and does not preserve packet order or prevent duplicates.
-* Sequence numbers enable the receiver to:
-  1. Detect duplicate packets (due to retransmissions or network duplication).
-  2. Detect missing packets.
-  3. Reorder out-of-order packets before delivering them to the application.
+**2. What does UDP provide?**  
+Connectionless datagram delivery. No application-level retransmission, ordering, or duplicate suppression.
 
-### Q3: Why is 16-bit Internet Checksum used when UDP already has a checksum?
-**A:**  
-* UDP checksums are often computed or verified by hardware (checksum offloading) or can be disabled in IPv4.
-* More importantly, our project includes a **deterministic channel emulator** that injects bit errors at the application layer to test corruption handling. Having our own packet-level checksum ensures we test and verify error detection explicitly.
-
-### Q4: What is the difference between Cumulative ACK and Individual ACK?
-**A:**  
-* **Cumulative ACK (used in GBN)**: An ACK with sequence $k$ asserts: *"I have successfully received all packets with sequence numbers $\le k$"*. If an ACK for $k-1$ is lost but ACK for $k$ arrives, the sender knows both $k-1$ and $k$ are safe.
-* **Individual ACK (used in SR)**: An ACK with sequence $k$ asserts: *"I have received packet $k$ specifically"*. It says nothing about packets $0 \dots k-1$.
-
-### Q5: Why does Go-Back-N perform poorly when packets are reordered?
-**A:**  
-* GBN has a receiver window of size 1 and will **discard** any packet that is not strictly the `expected_seqnum`.
-* If packets 2 and 3 are swapped (3 arrives before 2), GBN drops packet 3 and sends a duplicate ACK for packet 1. Even when 2 arrives later, 3 has to be retransmitted from scratch when the sender's timer expires.
-
-### Q6: Why must the window size in Selective Repeat be at most half the sequence number space ($W \le \frac{1}{2} \text{SeqSpace}$)?
-**A:**  
-* If $W > \frac{1}{2} \text{SeqSpace}$, the receiver's window overlaps with an unacknowledged past window.
-* **Example**: If sequence numbers are $0, 1, 2, 3$ (space = 4) and window size $W = 3$:
-  1. Sender sends 0, 1, 2.
-  2. Receiver accepts all and advances window to $[3, 0, 1]$.
-  3. All ACKs are lost.
-  4. Sender retransmits packet 0.
-  5. The receiver cannot determine if sequence 0 is a duplicate retransmission or a brand new packet from the next cycle!
-* Constraining $W \le \text{SeqSpace} / 2$ guarantees that the current receiver window never overlaps with the sender's possible retransmission window.
+**3. How does your system add reliability?**  
+Sequence numbers, ACKs, ARQ retransmission, timers/RTO, checksums, in-order delivery, and SHA-256 end-to-end checks (`src/arq/*`, `src/timing/*`, `src/packet.rs`, `src/app/integrity.rs`).
 
 ---
 
-## 2. Likely Live Modifications Asked by Professors
+### ARQ
 
-### Modification 1: Change ACK semantics in Go-Back-N
-* **Question**: *"Right now your ACK represents 'highest received seq'. Change it so that the ACK contains 'next expected seq'."*
-* **Where to modify**: In `src/go_back_n.rs`:
-  * Sender: `send_base = ack_num` instead of `send_base = ack_num + 1`.
-  * Receiver: Send `ACK(expected_seqnum)` instead of `ACK(expected_seqnum - 1)`.
+**4. Stop-and-Wait:** One DATA in flight; wait for ACK; timeout retransmits that packet (`src/arq/sw.rs`).
 
-### Modification 2: Change Checksum algorithm
-* **Question**: *"Show how you would swap the 16-bit One's Complement sum for an XOR-based checksum or CRC."*
-* **Where to modify**: In `src/packet.rs`, modify the `calculate_checksum(&self)` function. Because framing encapsulates the checksum in bytes 8-9, the rest of the protocol remains completely unaffected.
+**5. Go-Back-N:** Sender window; cumulative ACK; receiver window 1 (discard early packets); timeout retransmits the outstanding window (`src/arq/gbn.rs`).
 
-### Modification 3: Toggle receiver drop behavior
-* **Question**: *"In Go-Back-N, log whenever an out-of-order packet is dropped and count the wasted bandwidth."*
-* **Where to modify**: In `GbnReceiver::handle_packet`, inside the `else` block where `pkt.seq_num != self.expected_seqnum`.
+**6. Selective Repeat:** Sender/receiver windows; individual ACKs; buffer in-window out-of-order DATA; timeout retransmits only that seq (`src/arq/sr.rs`).
+
+**7. Why SR usually retransmits fewer under reordering?**  
+SR can accept and ACK early packets inside the window. GBN discards them and often recovers only after timeout by resending the window. E1 (loss=0) showed GBN retransmissions rising with reorder while SR stayed at 0.
+
+**8. Out-of-order packet in GBN?** Discarded; duplicate cumulative ACK of last in-order seq (after seq 0 has been received).
+
+**9. Out-of-order in SR?** If inside receive window: buffer + individual ACK; deliver when the gap fills.
 
 ---
 
-## 3. Common Bugs & Gotchas to Avoid
+### Packet Design
 
-1. **Forgetting to send ACKs for duplicate packets**:
-   * If a receiver receives an old packet ($seq < expected$), it *must* re-send the ACK. If it silently ignores it, the sender will time out indefinitely because its previous ACK was lost!
-2. **Timer reset bugs in Go-Back-N**:
-   * In GBN, when an ACK arrives, do not stop the timer unless the buffer is completely empty (`send_base == next_seqnum`). If packets are still in flight, you must **restart** the timer for the oldest remaining packet!
-3. **Integer underflow on `expected_seq - 1`**:
-   * If sequence starts at 0 and no packet has arrived yet, `expected_seq - 1` can underflow a `u32` if not checked! Use an explicit `Option<u32>` or safe initial state.
+**10. Sequence numbers:** Detect duplicates, gaps, and ordering; identify ACK coverage.
+
+**11. Checksum:** Detect corruption (including emulator bit flips); RFC 1071 over header+payload.
+
+**12. Length:** Bound payload parsing; avoid reading past the datagram.
+
+**13. Type/flag:** Distinguish DATA/ACK/FIN; retransmission flag supports Karn’s rule.
+
+---
+
+### RTO
+
+**14. SRTT:** Smoothed RTT estimate.
+
+**15. RTTVAR:** RTT variation estimate.
+
+**16. Why adaptive RTO?** Fixed timeouts are too short (spurious retransmits) or too long (slow recovery) as RTT changes.
+
+**17. Exponential backoff:** After timeout, increase RTO (doubling, clamped) to avoid timer storms.
+
+**18. Karn’s algorithm:** Do not update RTT from ACKs of retransmitted segments (ambiguous which copy was ACKed).
+
+**19. RTO too small?** Timer fires before the ACK could arrive → premature retransmission (seen at 0.5× in E4).
+
+---
+
+### Channel Emulator
+
+**20. Deterministic seeds?** Same impairment draws for matched protocol comparisons.
+
+**21. Why loss=0 in E1?** Isolate reordering effects from loss-driven recovery.
+
+**22. Corruption?** Emulator can flip a bit; packet checksum fails → drop.
+
+**23. Duplication?** Emulator may deliver an extra copy; ARQ must tolerate duplicates.
+
+---
+
+### Experiments
+
+**24. Primary hypothesis?** Under controlled increasing reorder (zero loss), GBN retransmits more than SR because it cannot use early packets the way SR can.
+
+**25. Independent variable (E1):** Configured forward reorder rate (protocol as second factor).
+
+**26. Held constant (E1):** Loss/dup/corrupt=0, delay/jitter/hold, fixture, chunk, windows, RTO bounds/multiplier.
+
+**27. Matched seeds?** Pair protocols on identical channel draws.
+
+**28. Five repetitions?** n=5 per cell for means / Student-t CI (df=4); still limited power.
+
+**29. 95% CI?** `mean ± t_{n-1,0.975}·SEM` in the Python analysis scripts.
+
+**30. E1 showed?** SW & SR: 0 data retransmissions across reorder grid; GBN: rising timeout retransmissions and longer duration; SR remains fast. All 90 SUCCESS.
+
+**31. E4 showed?** Premature retransmissions at 0.5× only; 3.0× tends to lengthen recovery vs 1.0× under 5% loss.
+
+**32. Limitations?** Virtual time; fixed grids; n=5; one fixture; E1/E4 factor isolation; localhost UDP; no window study run.
+
+---
+
+### Implementation
+
+**33. Real UDP vs virtual experiment?** Same ARQ/packet/RTO/chunking. Experiments use `run_transfer` + Channel + virtual clock. Demo uses `UdpSocket` wall clock without the emulator (`src/app/udp.rs`).
+
+**34. FIN?** After DATA drained/ACKed, sender sends FIN; receivers ACK FIN; receiver finalizes file and lingers briefly for FIN retries.
+
+**35. Integrity?** SHA-256 of source vs reconstructed/written bytes; required for SUCCESS in experiments.
+
+**36. Duplicates?** Receivers re-ACK / ignore duplicate DATA without double-delivering to the app.
+
+**37. Timeouts?** Timers expire → ARQ `handle_timeout` → retransmit → `RtoEstimator::on_timeout` backoff; socket path also has a hard transfer deadline.
