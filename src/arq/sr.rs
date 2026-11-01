@@ -3,6 +3,7 @@
 // Component: Protocol & ARQ - Selective Repeat State Machines
 
 use crate::packet::{Packet, PacketType};
+use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
 
 /// Entry tracking an in-flight packet within the sender window.
@@ -193,9 +194,9 @@ impl SelectiveRepeatReceiver {
                             self.delivered_data.push(buffered_payload);
                             self.recv_base = self.recv_base.wrapping_add(1);
                         }
-                    } else if !self.buffer.contains_key(&seq) {
+                    } else if let Entry::Vacant(slot) = self.buffer.entry(seq) {
                         // Out-of-order packet within window: BUFFER IT!
-                        self.buffer.insert(seq, pkt.payload.clone());
+                        slot.insert(pkt.payload.clone());
                         self.buffered_out_of_order += 1;
                     } else {
                         // Already buffered duplicate

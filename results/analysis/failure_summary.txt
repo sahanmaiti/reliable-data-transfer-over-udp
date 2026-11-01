@@ -1,0 +1,25 @@
+Failure summary for the primary reordering study.
+Metric means use only SUCCESS trials whose SHA-256 digests match.
+Failed trials are counted here and are not entered as zero successes.
+
+StopAndWait reorder 0.00: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+StopAndWait reorder 0.05: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+StopAndWait reorder 0.10: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+StopAndWait reorder 0.15: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+StopAndWait reorder 0.20: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+StopAndWait reorder 0.25: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+GoBackN reorder 0.00: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+GoBackN reorder 0.05: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+GoBackN reorder 0.10: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+GoBackN reorder 0.15: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+GoBackN reorder 0.20: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+GoBackN reorder 0.25: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+SelectiveRepeat reorder 0.00: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+SelectiveRepeat reorder 0.05: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+SelectiveRepeat reorder 0.10: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+SelectiveRepeat reorder 0.15: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+SelectiveRepeat reorder 0.20: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+SelectiveRepeat reorder 0.25: total 5, success 5, failed 0, integrity 0, timeout 0, other 0
+
+Records outside the primary study:
+none

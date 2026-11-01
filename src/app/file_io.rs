@@ -1,9 +1,9 @@
 // CS-30003: Reliable Data Transfer over UDP
-// Author: Sahan Maiti (Team Lead)
+// Author: Sahan Maiti (Evaluation & Integration)
 // Component: Application Layer - File Chunking, Buffering & Reconstruction
 
-use crate::packet::{Packet, MAX_PAYLOAD_SIZE};
 use crate::app::integrity::compute_sha256;
+use crate::packet::{Packet, MAX_PAYLOAD_SIZE};
 use std::collections::BTreeMap;
 use std::fs::File;
 use std::io::{self, Read, Write};
@@ -24,7 +24,10 @@ impl Chunker {
     /// Creates a new Chunker with the specified maximum payload chunk size.
     pub fn new(chunk_size: usize) -> Self {
         assert!(chunk_size > 0, "Chunk size must be non-zero");
-        assert!(chunk_size <= MAX_PAYLOAD_SIZE, "Chunk size cannot exceed MAX_PAYLOAD_SIZE");
+        assert!(
+            chunk_size <= MAX_PAYLOAD_SIZE,
+            "Chunk size cannot exceed MAX_PAYLOAD_SIZE"
+        );
         Chunker { chunk_size }
     }
 

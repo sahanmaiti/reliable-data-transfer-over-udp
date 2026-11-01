@@ -1,5 +1,5 @@
 // CS-30003: Reliable Data Transfer over UDP
-// Author: Sahan Maiti (Team Lead)
+// Author: Sahan Maiti (Evaluation & Integration)
 // Integration Tests: File Chunker, Reassembler & SHA-256 Verification
 
 use reliable_udp::app::{compute_sha256, Chunker, Reassembler};

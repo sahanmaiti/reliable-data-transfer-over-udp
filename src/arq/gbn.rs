@@ -153,21 +153,22 @@ impl GoBackNReceiver {
                     ack.compute_and_set_checksum();
                     Some(ack)
                 } else {
-                    // Out-of-order or duplicate packet!
-                    // In Go-Back-N: DISCARD the packet and resend cumulative ACK for last in-order seq.
+                    // Out-of-order or duplicate packet.
+                    // Discard it and, only after at least one in-order delivery,
+                    // resend the cumulative ACK of the last in-order sequence.
+                    //
+                    // Before sequence 0 has been received, expected_seq is 0.
+                    // ACK(0) would tell the sender that packet 0 is delivered.
+                    // Emit no ACK in that case.
                     self.discarded_out_of_order += 1;
-                    self.duplicate_acks_sent += 1;
 
                     if self.expected_seq > 0 {
+                        self.duplicate_acks_sent += 1;
                         let mut ack = Packet::new_ack(self.expected_seq - 1);
                         ack.compute_and_set_checksum();
                         Some(ack)
                     } else {
-                        // Nothing has been successfully received yet: ACK 0 with duplicate indicator
-                        let mut ack = Packet::new_ack(0);
-                        ack.set_retransmitted();
-                        ack.compute_and_set_checksum();
-                        Some(ack)
+                        None
                     }
                 }
             }

@@ -49,7 +49,10 @@ impl fmt::Display for PacketError {
             PacketError::UnknownPacketType(val) => {
                 write!(f, "unknown packet type: 0x{:02X}", val)
             }
-            PacketError::TruncatedPayload { declared, available } => {
+            PacketError::TruncatedPayload {
+                declared,
+                available,
+            } => {
                 write!(
                     f,
                     "truncated payload: declared {} bytes, but only {} available",
@@ -156,23 +159,21 @@ impl Packet {
         header[6..8].copy_from_slice(&payload_len.to_be_bytes());
         header[8..10].copy_from_slice(&0u16.to_be_bytes()); // Checksum = 0 during calculation
 
-        // Sum header 16-bit words
-        for chunk in header.chunks_exact(2) {
-            let word = u16::from_be_bytes([chunk[0], chunk[1]]);
+        // Sum header 16-bit words. The header length is even, so no pad byte remains.
+        let (header_words, _) = header.as_chunks::<2>();
+        for chunk in header_words {
+            let word = u16::from_be_bytes(*chunk);
             sum = sum.wrapping_add(word as u32);
         }
 
-        // Sum payload 16-bit words
-        let mut chunks = self.payload.chunks_exact(2);
-        for chunk in chunks.by_ref() {
-            let word = u16::from_be_bytes([chunk[0], chunk[1]]);
+        // Sum payload 16-bit words. An odd trailing byte is padded with zero.
+        let (payload_words, remainder) = self.payload.as_chunks::<2>();
+        for chunk in payload_words {
+            let word = u16::from_be_bytes(*chunk);
             sum = sum.wrapping_add(word as u32);
         }
-
-        // If odd byte remaining, pad with zero on the right
-        let remainder = chunks.remainder();
-        if !remainder.is_empty() {
-            let word = u16::from_be_bytes([remainder[0], 0]);
+        if let Some(&byte) = remainder.first() {
+            let word = u16::from_be_bytes([byte, 0]);
             sum = sum.wrapping_add(word as u32);
         }
 

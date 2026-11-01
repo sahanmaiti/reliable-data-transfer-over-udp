@@ -1,12 +1,12 @@
 // CS-30003: Reliable Data Transfer over UDP
-// Author: Sahan Maiti (Team Lead)
+// Author: Sahan Maiti (Evaluation & Integration)
 // Component: Application Layer - SHA-256 End-to-End Integrity Verification
 
+use sha2::{Digest, Sha256};
 use std::fmt::Write as FmtWrite;
 use std::fs::File;
 use std::io::{self, Read};
 use std::path::Path;
-use sha2::{Digest, Sha256};
 
 /// Summary of an end-to-end file integrity verification.
 #[derive(Debug, Clone, PartialEq, Eq)]

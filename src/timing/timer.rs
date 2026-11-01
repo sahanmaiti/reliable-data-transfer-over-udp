@@ -74,13 +74,8 @@ impl RetransmissionTimer {
 
     /// Returns remaining duration relative to an explicit instant.
     pub fn remaining_at(&self, now: Instant) -> Option<Duration> {
-        self.deadline.map(|dl| {
-            if now >= dl {
-                Duration::ZERO
-            } else {
-                dl - now
-            }
-        })
+        self.deadline
+            .map(|dl| if now >= dl { Duration::ZERO } else { dl - now })
     }
 
     /// Returns `true` if the timer is active and current wall clock has passed deadline.
@@ -117,18 +112,16 @@ impl Default for RetransmissionTimer {
     }
 }
 
-/// An entry in the MultiTimer queue.
-#[derive(Debug, Clone)]
-struct MultiTimerEntry {
-    deadline: Instant,
-    #[allow(dead_code)]
-    generation: TimerId,
-}
 
 /// Manages multiple independent packet timers (essential for Selective Repeat).
+///
+/// Each key holds one deadline. Starting that key again replaces the deadline,
+/// and cancelling removes it, so an older deadline for the same key cannot
+/// expire. `RetransmissionTimer` keeps a generation on the timer itself because
+/// one timer is re-armed while the caller may still hold the previous id.
 #[derive(Debug, Clone)]
 pub struct MultiTimer<K: Hash + Eq + Clone> {
-    timers: HashMap<K, MultiTimerEntry>,
+    timers: HashMap<K, Instant>,
     global_generation: TimerId,
 }
 
@@ -150,15 +143,8 @@ impl<K: Hash + Eq + Clone> MultiTimer<K> {
     /// Sets an individual timer relative to an explicit instant.
     pub fn start_timer_at(&mut self, key: K, now: Instant, duration: Duration) -> TimerId {
         self.global_generation = self.global_generation.wrapping_add(1);
-        let gen = self.global_generation;
-        self.timers.insert(
-            key,
-            MultiTimerEntry {
-                deadline: now + duration,
-                generation: gen,
-            },
-        );
-        gen
+        self.timers.insert(key, now + duration);
+        self.global_generation
     }
 
     /// Cancels the timer for key `K`. Returns true if a timer existed.
@@ -174,7 +160,7 @@ impl<K: Hash + Eq + Clone> MultiTimer<K> {
     /// Checks if key `K` is expired relative to `now`.
     pub fn is_expired_at(&self, key: &K, now: Instant) -> bool {
         match self.timers.get(key) {
-            Some(entry) => now >= entry.deadline,
+            Some(deadline) => now >= *deadline,
             None => false,
         }
     }
@@ -184,7 +170,7 @@ impl<K: Hash + Eq + Clone> MultiTimer<K> {
         let expired_keys: Vec<K> = self
             .timers
             .iter()
-            .filter(|(_, entry)| now >= entry.deadline)
+            .filter(|(_, &deadline)| now >= deadline)
             .map(|(k, _)| k.clone())
             .collect();
 
@@ -197,7 +183,7 @@ impl<K: Hash + Eq + Clone> MultiTimer<K> {
 
     /// Finds the earliest scheduled deadline across all active timers.
     pub fn earliest_deadline(&self) -> Option<Instant> {
-        self.timers.values().map(|e| e.deadline).min()
+        self.timers.values().copied().min()
     }
 
     /// Number of active timers.
