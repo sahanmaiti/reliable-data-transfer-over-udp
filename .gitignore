@@ -24,3 +24,5 @@ MY_WORK_EXPLANATION.md
 docs/MY_WORK_EXPLANATION.md
 *PRIVATE*
 *.local.md
+*.bin
+received_output*

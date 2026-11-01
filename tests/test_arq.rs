@@ -108,7 +108,7 @@ fn test_gobackn_discards_out_of_order_packets() {
     let mut receiver = GoBackNReceiver::new();
 
     let pkt0 = sender.send_chunk(b"0".to_vec()).unwrap();
-    let pkt1 = sender.send_chunk(b"1".to_vec()).unwrap();
+    let _pkt1 = sender.send_chunk(b"1".to_vec()).unwrap();
     let pkt2 = sender.send_chunk(b"2".to_vec()).unwrap();
 
     // Receiver gets pkt0

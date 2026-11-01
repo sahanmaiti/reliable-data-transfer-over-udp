@@ -121,6 +121,7 @@ impl Default for RetransmissionTimer {
 #[derive(Debug, Clone)]
 struct MultiTimerEntry {
     deadline: Instant,
+    #[allow(dead_code)]
     generation: TimerId,
 }
 
