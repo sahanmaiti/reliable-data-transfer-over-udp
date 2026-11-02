@@ -57,6 +57,10 @@ pub struct RtoStats {
     pub max_rtt: Option<Duration>,
     /// Sum of all valid RTT samples (for computing arithmetic mean).
     pub sum_rtt_millis: f64,
+    /// Most recent valid RTT sample.
+    pub latest_rtt: Option<Duration>,
+    /// Maximum number of consecutive timeouts observed in any single loss episode.
+    pub max_consecutive_timeouts: u32,
 }
 
 /// Dynamic RTO estimator implementing the Jacobson/Karels algorithm (RFC 6298)
@@ -74,6 +78,8 @@ pub struct RtoEstimator {
     base_rto: Duration,
     /// Tracks if we are currently in exponential backoff mode
     in_backoff: bool,
+    /// Current count of consecutive timeouts without an intervening valid ACK
+    consecutive_timeouts: u32,
     /// Telemetry and statistics
     pub stats: RtoStats,
 }
@@ -94,6 +100,7 @@ impl RtoEstimator {
             current_rto: initial,
             base_rto: initial,
             in_backoff: false,
+            consecutive_timeouts: 0,
             stats: RtoStats::default(),
         }
     }
@@ -121,6 +128,41 @@ impl RtoEstimator {
         self.rttvar
     }
 
+    /// Returns the base calculated RTO before any exponential backoff was applied.
+    pub fn base_rto(&self) -> Duration {
+        self.base_rto
+    }
+
+    /// Returns whether the estimator is currently in exponential backoff mode.
+    pub fn is_in_backoff(&self) -> bool {
+        self.in_backoff
+    }
+
+    /// Returns the number of consecutive timeouts experienced since the last valid ACK.
+    pub fn consecutive_timeouts(&self) -> u32 {
+        self.consecutive_timeouts
+    }
+
+    /// Returns the most recent accepted RTT measurement sample, if any.
+    pub fn latest_rtt(&self) -> Option<Duration> {
+        self.stats.latest_rtt
+    }
+
+    /// Checks whether the number of consecutive timeouts has reached or exceeded `max_retries`.
+    ///
+    /// Can be used by transport connection state machines to declare link failure.
+    pub fn has_exceeded_retry_limit(&self, max_retries: u32) -> bool {
+        self.consecutive_timeouts >= max_retries
+    }
+
+    /// Resets the exponential backoff state, restoring current RTO to `base_rto`
+    /// and clearing the consecutive timeout count.
+    pub fn reset_backoff(&mut self) {
+        self.in_backoff = false;
+        self.consecutive_timeouts = 0;
+        self.current_rto = self.base_rto;
+    }
+
     /// Updates the RTO estimate using a new RTT measurement sample.
     ///
     /// Implements Karn's Algorithm:
@@ -136,6 +178,7 @@ impl RtoEstimator {
         let sample_ms = sample.as_secs_f64() * 1000.0;
         self.stats.sample_count += 1;
         self.stats.sum_rtt_millis += sample_ms;
+        self.stats.latest_rtt = Some(sample);
 
         // Track min/max observed RTT
         self.stats.min_rtt = Some(match self.stats.min_rtt {
@@ -149,6 +192,7 @@ impl RtoEstimator {
 
         // Any successful non-retransmitted ACK clears backoff state
         self.in_backoff = false;
+        self.consecutive_timeouts = 0;
 
         let g_ms = self.config.granularity.as_secs_f64() * 1000.0;
         let alpha = self.config.alpha;
@@ -198,6 +242,11 @@ impl RtoEstimator {
     pub fn on_timeout(&mut self) -> Duration {
         self.stats.timeout_count += 1;
         self.stats.backoff_count += 1;
+        self.consecutive_timeouts = self.consecutive_timeouts.saturating_add(1);
+        self.stats.max_consecutive_timeouts = self
+            .stats
+            .max_consecutive_timeouts
+            .max(self.consecutive_timeouts);
         self.in_backoff = true;
 
         // Exponential backoff: double the current RTO

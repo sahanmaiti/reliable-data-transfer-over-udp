@@ -195,3 +195,86 @@ fn test_multi_timer_selective_repeat() {
     assert_eq!(expired_later, vec![103]);
     assert!(multi.is_empty());
 }
+
+#[test]
+fn test_consecutive_timeouts_and_backoff_lifecycle() {
+    let mut estimator = RtoEstimator::new();
+
+    // Initial state before any samples
+    assert!(!estimator.is_in_backoff());
+    assert_eq!(estimator.consecutive_timeouts(), 0);
+    assert_eq!(estimator.latest_rtt(), None);
+    assert_eq!(estimator.stats.max_consecutive_timeouts, 0);
+
+    // Initial RTT sample = 80ms
+    // RFC 6298: SRTT = 80ms, RTTVAR = 40ms, RTO = 80 + 4*40 = 240ms
+    assert!(estimator.update_rtt(Duration::from_millis(80), false));
+    assert_eq!(estimator.latest_rtt(), Some(Duration::from_millis(80)));
+    assert_eq!(estimator.base_rto(), Duration::from_millis(240));
+    assert_eq!(estimator.current_rto(), Duration::from_millis(240));
+    assert!(!estimator.is_in_backoff());
+    assert_eq!(estimator.consecutive_timeouts(), 0);
+
+    // 1st timeout: doubles RTO to 480ms, enters backoff mode
+    estimator.on_timeout();
+    assert!(estimator.is_in_backoff());
+    assert_eq!(estimator.current_rto(), Duration::from_millis(480));
+    assert_eq!(estimator.base_rto(), Duration::from_millis(240));
+    assert_eq!(estimator.consecutive_timeouts(), 1);
+    assert_eq!(estimator.stats.max_consecutive_timeouts, 1);
+    assert!(!estimator.has_exceeded_retry_limit(3));
+
+    // 2nd timeout: doubles RTO to 960ms
+    estimator.on_timeout();
+    assert_eq!(estimator.current_rto(), Duration::from_millis(960));
+    assert_eq!(estimator.consecutive_timeouts(), 2);
+    assert_eq!(estimator.stats.max_consecutive_timeouts, 2);
+
+    // 3rd timeout: doubles RTO to 1920ms
+    estimator.on_timeout();
+    assert_eq!(estimator.current_rto(), Duration::from_millis(1920));
+    assert_eq!(estimator.consecutive_timeouts(), 3);
+    assert_eq!(estimator.stats.max_consecutive_timeouts, 3);
+    assert!(estimator.has_exceeded_retry_limit(3));
+    assert!(!estimator.has_exceeded_retry_limit(4));
+
+    // Retransmission sample: Karn's algorithm rejects it; backoff state must persist!
+    let retransmission_accepted = estimator.update_rtt(Duration::from_millis(300), true);
+    assert!(!retransmission_accepted);
+    assert!(estimator.is_in_backoff());
+    assert_eq!(estimator.consecutive_timeouts(), 3);
+    assert_eq!(estimator.current_rto(), Duration::from_millis(1920));
+    assert_eq!(estimator.latest_rtt(), Some(Duration::from_millis(80))); // unchanged
+
+    // Fresh non-retransmitted sample arrives: backoff clears and consecutive_timeouts resets
+    let fresh_accepted = estimator.update_rtt(Duration::from_millis(100), false);
+    assert!(fresh_accepted);
+    assert_eq!(estimator.latest_rtt(), Some(Duration::from_millis(100)));
+    assert!(!estimator.is_in_backoff());
+    assert_eq!(estimator.consecutive_timeouts(), 0);
+    assert!(!estimator.has_exceeded_retry_limit(3));
+    // Historical max consecutive timeouts remains recorded for telemetry
+    assert_eq!(estimator.stats.max_consecutive_timeouts, 3);
+}
+
+#[test]
+fn test_reset_backoff_explicit_restore() {
+    let mut estimator = RtoEstimator::new();
+    estimator.update_rtt(Duration::from_millis(100), false);
+    let base = estimator.base_rto();
+    assert_eq!(base, Duration::from_millis(300));
+
+    // Trigger consecutive timeouts
+    estimator.on_timeout();
+    estimator.on_timeout();
+    assert_eq!(estimator.current_rto(), Duration::from_millis(1200));
+    assert!(estimator.is_in_backoff());
+    assert_eq!(estimator.consecutive_timeouts(), 2);
+
+    // Explicitly reset backoff
+    estimator.reset_backoff();
+    assert!(!estimator.is_in_backoff());
+    assert_eq!(estimator.consecutive_timeouts(), 0);
+    assert_eq!(estimator.current_rto(), base);
+    assert_eq!(estimator.base_rto(), base);
+}
