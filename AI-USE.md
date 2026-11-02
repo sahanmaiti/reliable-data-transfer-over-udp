@@ -1,6 +1,6 @@
 # AI Use Statement
 
-This project was developed by the listed student team for CS-30003. AI coding assistants (including Cursor) were used during development. This file discloses that assistance as accurately as the available evidence and confirmed team recollection allow.
+This project was developed by the listed student team for CS-30003. AI coding assistants (including Cursor and Google Antigravity / Gemini) were used during development. This file discloses that assistance as accurately as the available evidence and confirmed team recollection allow.
 
 The course permits AI assistance for explaining concepts, debugging, code review, generating tests, boilerplate, plotting/analysis scripts, and improving writing. It prohibits submitting AI-generated **core protocol implementation** as the team’s own work without genuine authorship and understanding. An honest disclosure is required.
 
@@ -21,15 +21,15 @@ Git commit **authors** for the initial module drops attribute ARQ/packet work to
 
 AI tools were used to explain concepts, discuss design trade-offs, debug failures, and review code. Suggestions were accepted, rejected, or modified by the team.
 
-### 2. Tests, plotting, analysis, and documentation
+### 2. Tests, plotting, analysis, web visualization, and documentation
 
-AI assistance was used for test drafting and refinement, experiment orchestration and analysis scripts (Python), plotting helpers, and drafting/editing documentation and reports. Generated measurements were **not** invented by AI: experimental JSON/CSV records come from the Rust `run-experiment` path.
+AI assistance was used for test drafting and refinement, experiment orchestration and analysis scripts (Python), plotting helpers, the interactive web-based Protocol Inspector visualization suite (`web/`), and drafting/editing documentation and reports. Generated measurements were **not** invented by AI: experimental JSON/CSV records come from the Rust `run-experiment` path.
 
 ### 3. Implementation suggestions and generated code (reviewed/tested)
 
 AI assistance across **ARQ**, **timing/RTO**, and **channel-emulator** work was **mixed**: repository history and file headers attribute module ownership to the members above, but the exact fraction of AI-generated versus hand-written lines in those original modules **cannot be established from Git history alone**.
 
-Later Cursor-assisted work (as recalled by Sahan) was used primarily as **suggestions** during integration, experiment automation, localhost UDP wiring, testing, and documentation workflows. Those suggestions were reviewed and tested before retention. Successful tests and code review do **not**, by themselves, prove human authorship of every line.
+Later AI-assisted work (via Cursor and Google Antigravity / Gemini) was used primarily for **suggestions and tooling** during integration, experiment automation, localhost UDP wiring, testing, local network configuration for the visualizer server (`web/serve.py`), and documentation workflows. Those suggestions were reviewed and tested before retention. Successful tests and code review do **not**, by themselves, prove human authorship of every line.
 
 ### 4. Human decisions and responsibility
 
@@ -51,4 +51,8 @@ The team chose architecture, protocol behaviour, experimental factors, and evalu
 
 ## Tools
 
-Cursor-based AI assistants were used during development. Exact prompt logs and dates are not retained in the repository; this disclosure is limited to confirmed recollection and available evidence.
+AI assistants used during development include:
+- **Cursor** — used during development for concept explanations, code navigation, drafting tests, and integration.
+- **Google Antigravity / Gemini** — used for execution validation, test verification, web Protocol Inspector integration (`web/`), network interface diagnostics, and documentation refinement.
+
+Exact prompt logs and dates are not retained in the repository; this disclosure is limited to confirmed recollection and available evidence.
