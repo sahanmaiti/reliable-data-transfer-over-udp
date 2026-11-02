@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Reliable UDP Transfer • iOS Protocol Inspector</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Apple San Francisco & System Font Stack -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="ios-root">
+
+  <!-- iOS System Status Bar -->
+  <header class="ios-status-bar">
+    <div class="status-left">
+      <span class="status-time" id="statusClock">9:41</span>
+    </div>
+    
+    <!-- Dynamic Island HUD -->
+    <div class="dynamic-island" id="dynamicIsland">
+      <div class="island-collapsed">
+        <span class="island-dot" id="islandPulse"></span>
+        <span class="island-title" id="islandProtocolLabel">GBN Window: 4/4</span>
+        <span class="island-badge" id="islandStatusBadge">READY</span>
+      </div>
+      <div class="island-expanded" id="islandExpanded">
+        <div class="island-detail-item">
+          <span class="detail-label">In-Flight</span>
+          <span class="detail-val" id="islandInFlight">0 pkts</span>
+        </div>
+        <div class="island-detail-divider"></div>
+        <div class="island-detail-item">
+          <span class="detail-label">Est. RTT</span>
+          <span class="detail-val" id="islandRtt">120ms</span>
+        </div>
+        <div class="island-detail-divider"></div>
+        <div class="island-detail-item">
+          <span class="detail-label">Loss Rate</span>
+          <span class="detail-val" id="islandLoss">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-right">
+      <svg class="status-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.28 19.67 10.59 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+      </svg>
+      <svg class="status-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.5c3.5 0 6.74 1.34 9.21 3.55L12 19.06 2.79 11.05C5.26 8.84 8.5 7.5 12 7.5z"/>
+      </svg>
+      <div class="status-battery">
+        <div class="battery-body"><div class="battery-level"></div></div>
+        <div class="battery-cap"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- iOS App Navigation Header -->
+  <div class="ios-nav-bar">
+    <div class="nav-title-wrap">
+      <span class="nav-subtitle">RFC 1071 / CS-30003 ARQ ENGINE</span>
+      <h1 class="nav-title">Reliable UDP Inspector</h1>
+    </div>
+
+    <!-- Cupertino Segmented Protocol Selector -->
+    <div class="segmented-control" role="tablist">
+      <button class="seg-btn" data-protocol="sw" id="tabSW">Stop-and-Wait</button>
+      <button class="seg-btn active" data-protocol="gbn" id="tabGBN">Go-Back-N</button>
+      <button class="seg-btn" data-protocol="sr" id="tabSR">Selective Repeat</button>
+      <div class="seg-indicator" id="segIndicator"></div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="ios-stage">
+
+    <!-- Top Control Bar (iOS Toolbar Style) -->
+    <section class="ios-toolbar-card">
+      <div class="toolbar-actions">
+        <button class="ios-button ios-button-primary" id="btnSendChunk">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          <span>Send Chunk</span>
+        </button>
+
+        <button class="ios-button ios-button-secondary" id="btnStreamToggle">
+          <span id="streamPlayIcon">▶</span>
+          <span id="streamText">Auto-Stream</span>
+        </button>
+
+        <button class="ios-button ios-button-secondary" id="btnStep">
+          <span>Step ❯</span>
+        </button>
+
+        <button class="ios-button ios-button-destructive-ghost" id="btnReset">
+          <span>Reset</span>
+        </button>
+      </div>
+
+      <div class="toolbar-divider"></div>
+
+      <!-- Quick Impairment Injectors -->
+      <div class="impairment-triggers">
+        <button class="ios-chip-toggle" id="btnDropNext">
+          <span class="chip-dot red"></span>
+          <span>Drop Next Pkt</span>
+        </button>
+        <button class="ios-chip-toggle" id="btnCorruptNext">
+          <span class="chip-dot orange"></span>
+          <span>Corrupt Checksum</span>
+        </button>
+        <button class="ios-chip-toggle" id="btnDropAckNext">
+          <span class="chip-dot purple"></span>
+          <span>Drop Next ACK</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Interactive Protocol Pipeline Stage -->
+    <section class="protocol-viewport">
+
+      <!-- Sender Node (Client) -->
+      <div class="node-panel sender-node">
+        <div class="node-header">
+          <div class="node-badge sender-badge">
+            <span class="node-status-dot"></span>
+            <span>SENDER (127.0.0.1:9001)</span>
+          </div>
+          <div class="node-stat-pill">
+            <span class="stat-caption">Base:</span>
+            <span class="stat-number" id="lblSendBase">0</span>
+            <span class="stat-caption">Next:</span>
+            <span class="stat-number" id="lblNextSeq">0</span>
+          </div>
+        </div>
+
+        <!-- Sliding Window Visualizer Bar -->
+        <div class="window-container">
+          <div class="window-legend">
+            <span>Sender Sliding Window</span>
+            <span class="window-tag" id="lblWindowRatio">Size: W=4</span>
+          </div>
+          <div class="sliding-buffer-track" id="senderBufferTrack">
+            <!-- Dynamic buffer frames rendered by app.js -->
+          </div>
+          <div class="buffer-annotations">
+            <div class="annotation"><span class="color-dot acked"></span>Acked</div>
+            <div class="annotation"><span class="color-dot in-flight"></span>In-Flight</div>
+            <div class="annotation"><span class="color-dot usable"></span>Usable</div>
+            <div class="annotation"><span class="color-dot queued"></span>Pending</div>
+          </div>
+        </div>
+
+        <!-- Active Timers Tray -->
+        <div class="timer-tray">
+          <div class="tray-label">
+            <span>Active Retransmission Timer(s)</span>
+            <span class="tray-rto" id="lblRTO">RTO: 1000ms (RFC 6298)</span>
+          </div>
+          <div class="timer-bars" id="activeTimersContainer">
+            <div class="no-timers-hint">No active packet timers</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transmission Pipe (The Simulated Analog Channel) -->
+      <div class="channel-pipe-wrap">
+        <div class="pipe-header">
+          <span class="pipe-badge">UDP WIRE SIMULATOR (10-BYTE RFC 1071 FRAME)</span>
+          <div class="channel-live-speed">
+            <span id="channelStatusText">Channel Clear • 0 pkts in transit</span>
+          </div>
+        </div>
+
+        <!-- The Canvas / SVG Flight Corridor -->
+        <div class="flight-corridor" id="flightCorridor">
+          <!-- Lane A: Data Packets (Sender -> Receiver) -->
+          <div class="corridor-lane lane-down" id="laneData">
+            <div class="lane-label">DATA PATH [Seq, Len, CRC32]</div>
+            <div class="wire-guide-line"></div>
+          </div>
+
+          <!-- Channel Center Impairment Vortex -->
+          <div class="channel-center-hub">
+            <div class="hub-pulse-ring"></div>
+            <div class="hub-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+              </svg>
+            </div>
+            <div class="hub-label" id="hubActionText">UDP PIPE</div>
+          </div>
+
+          <!-- Lane B: ACK Packets (Receiver -> Sender) -->
+          <div class="corridor-lane lane-up" id="laneAck">
+            <div class="lane-label">ACK PATH [AckNum, Cumulative/Selective]</div>
+            <div class="wire-guide-line"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Receiver Node (Server) -->
+      <div class="node-panel receiver-node">
+        <div class="node-header">
+          <div class="node-badge receiver-badge">
+            <span class="node-status-dot"></span>
+            <span>RECEIVER (127.0.0.1:9002)</span>
+          </div>
+          <div class="node-stat-pill">
+            <span class="stat-caption">Expected Seq:</span>
+            <span class="stat-number green" id="lblExpectedSeq">0</span>
+          </div>
+        </div>
+
+        <!-- Receiver Buffer / Out-of-Order Cache -->
+        <div class="window-container">
+          <div class="window-legend">
+            <span>Receiver Accept Window</span>
+            <span class="window-tag" id="lblRcvMode">In-Order Cumulative (GBN)</span>
+          </div>
+          <div class="sliding-buffer-track receiver-track" id="receiverBufferTrack">
+            <!-- Dynamic buffer slots rendered by app.js -->
+          </div>
+          <div class="buffer-annotations">
+            <div class="annotation"><span class="color-dot delivered"></span>Delivered</div>
+            <div class="annotation"><span class="color-dot buffered"></span>Buffered (SR)</div>
+            <div class="annotation"><span class="color-dot expected"></span>Next Expected</div>
+          </div>
+        </div>
+
+        <!-- Application Delivery Queue Stream -->
+        <div class="delivery-tray">
+          <div class="tray-label">
+            <span>Delivered Application Stream</span>
+            <span class="tray-count" id="lblDeliveredCount">0 chunks received</span>
+          </div>
+          <div class="delivered-stream-box" id="deliveredStreamBox">
+            <span class="empty-stream-msg">Awaiting transmission chunks...</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Bottom Dashboard: Controls & Space-Time Sequence Chart -->
+    <section class="ios-bottom-split">
+      
+      <!-- Network Parameters Card (iOS Form / Inset Grouped List) -->
+      <div class="ios-form-group">
+        <div class="group-header">NETWORK & IMPAIRMENT SETTINGS</div>
+        <div class="group-container">
+          
+          <!-- Latency Slider -->
+          <div class="form-row">
+            <div class="row-label">
+              <span class="title">Propagation Delay (One-Way)</span>
+              <span class="subtitle">Simulates wire distance / network hops</span>
+            </div>
+            <div class="row-control">
+              <input type="range" min="100" max="1500" step="50" value="400" id="sliderLatency" class="ios-slider">
+              <span class="val-bubble" id="valLatency">400 ms</span>
+            </div>
+          </div>
+
+          <!-- Packet Drop Rate Slider -->
+          <div class="form-row">
+            <div class="row-label">
+              <span class="title">DATA Packet Loss Probability</span>
+              <span class="subtitle">Random UDP datagram drop rate</span>
+            </div>
+            <div class="row-control">
+              <input type="range" min="0" max="60" step="5" value="0" id="sliderLoss" class="ios-slider">
+              <span class="val-bubble" id="valLoss">0%</span>
+            </div>
+          </div>
+
+          <!-- ACK Drop Rate Slider -->
+          <div class="form-row">
+            <div class="row-label">
+              <span class="title">ACK Drop Probability</span>
+              <span class="subtitle">Lost return ACKs test cumulative recovery</span>
+            </div>
+            <div class="row-control">
+              <input type="range" min="0" max="60" step="5" value="0" id="sliderAckLoss" class="ios-slider">
+              <span class="val-bubble" id="valAckLoss">0%</span>
+            </div>
+          </div>
+
+          <!-- Window Size Slider (for GBN/SR) -->
+          <div class="form-row" id="rowWindowSize">
+            <div class="row-label">
+              <span class="title">Window Size (W)</span>
+              <span class="subtitle">Max unacknowledged packets allowed</span>
+            </div>
+            <div class="row-control">
+              <input type="range" min="1" max="8" step="1" value="4" id="sliderWindow" class="ios-slider">
+              <span class="val-bubble" id="valWindow">4</span>
+            </div>
+          </div>
+
+          <!-- Simulation Speed -->
+          <div class="form-row">
+            <div class="row-label">
+              <span class="title">Simulation Clock Rate</span>
+              <span class="subtitle">Slow motion inspection or real-time</span>
+            </div>
+            <div class="row-control speed-selector">
+              <button class="speed-pill" data-speed="0.5">0.5x</button>
+              <button class="speed-pill active" data-speed="1.0">1.0x</button>
+              <button class="speed-pill" data-speed="2.0">2.0x</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Real-Time Metrics & Sequence Ladder Diagram -->
+      <div class="ios-ladder-card">
+        <div class="ladder-header">
+          <div class="ladder-title-wrap">
+            <span class="group-header" style="padding:0">LADDER DIAGRAM (TIME-SEQUENCE CHART)</span>
+            <span class="ladder-sub">Sender &harr; Receiver Space-Time Interactions</span>
+          </div>
+          <div class="ladder-actions">
+            <button class="ios-mini-btn" id="btnClearChart">Clear</button>
+          </div>
+        </div>
+
+        <!-- Space-Time Ladder Canvas -->
+        <div class="ladder-canvas-wrap" id="ladderCanvasWrap">
+          <div class="ladder-axis sender-axis"><span>SENDER</span></div>
+          <div class="ladder-axis receiver-axis"><span>RECEIVER</span></div>
+          <div class="ladder-events-list" id="ladderEvents">
+            <!-- Dynamic arrow vectors rendered here -->
+          </div>
+        </div>
+
+        <!-- Live Calculated Protocol Metrics Bar -->
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <span class="m-title">Total Sent</span>
+            <span class="m-val" id="metricTotalSent">0</span>
+          </div>
+          <div class="metric-item">
+            <span class="m-title">Retransmissions</span>
+            <span class="m-val orange" id="metricRetrans">0</span>
+          </div>
+          <div class="metric-item">
+            <span class="m-title">Protocol Overhead</span>
+            <span class="m-val" id="metricOverhead">0.0%</span>
+          </div>
+          <div class="metric-item">
+            <span class="m-title">Smoothed RTT</span>
+            <span class="m-val" id="metricSRTT">400 ms</span>
+          </div>
+          <div class="metric-item">
+            <span class="m-title">Goodput</span>
+            <span class="m-val green" id="metricGoodput">100%</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- iOS Sheet: Packet Inspector Modal (Slides up on packet tap) -->
+  <div class="ios-modal-backdrop" id="packetModalBackdrop">
+    <div class="ios-sheet" id="packetInspectorSheet">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-header">
+        <div class="sheet-title-group">
+          <span class="sheet-badge" id="sheetBadge">DATA PACKET</span>
+          <h2 class="sheet-title" id="sheetTitle">Packet #0 Inspection</h2>
+        </div>
+        <button class="sheet-close-btn" id="btnCloseSheet">&times;</button>
+      </div>
+
+      <div class="sheet-body">
+        <!-- 10-Byte RFC 1071 Header Representation -->
+        <div class="header-breakdown">
+          <div class="field-box">
+            <span class="f-name">Sequence Num (4B)</span>
+            <span class="f-hex" id="sheetSeqHex">0x00000000</span>
+            <span class="f-dec" id="sheetSeqDec">0</span>
+          </div>
+          <div class="field-box">
+            <span class="f-name">Packet Type (1B)</span>
+            <span class="f-hex" id="sheetTypeHex">0x01</span>
+            <span class="f-dec" id="sheetTypeDec">DATA</span>
+          </div>
+          <div class="field-box">
+            <span class="f-name">Flags (1B)</span>
+            <span class="f-hex" id="sheetFlagsHex">0x00</span>
+            <span class="f-dec" id="sheetFlagsDec">Original</span>
+          </div>
+          <div class="field-box">
+            <span class="f-name">Length (2B)</span>
+            <span class="f-hex" id="sheetLenHex">0x0018</span>
+            <span class="f-dec" id="sheetLenDec">24 bytes</span>
+          </div>
+          <div class="field-box">
+            <span class="f-name">RFC 1071 Checksum (2B)</span>
+            <span class="f-hex" id="sheetCsumHex">0x7FA3</span>
+            <span class="f-dec green" id="sheetCsumDec">VALID &check;</span>
+          </div>
+        </div>
+
+        <!-- Payload Hex Viewer -->
+        <div class="payload-inspector">
+          <div class="payload-header">
+            <span>Payload Stream (ASCII & Hex Dump)</span>
+            <span id="sheetPayloadSize">24 bytes</span>
+          </div>
+          <div class="hex-dump" id="sheetHexDump">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
